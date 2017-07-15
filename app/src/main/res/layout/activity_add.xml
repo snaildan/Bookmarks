@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_add"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/main_bg"
+    tools:context="com.work.snaildan.activity.AddActivity">
+    <include
+        android:id="@+id/re_top"
+        android:layout_width="fill_parent"
+        android:layout_height="60dp"
+        layout="@layout/public_top_layout">
+    </include>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/re_top"
+        android:id="@+id/add_middle">
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/add_account_bg"/>
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:background="@drawable/add_account_firstrow"/>
+        <EditText
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="20dp"
+            android:layout_marginRight="30dp"
+            android:inputType="number"
+            android:textColor="#000000"
+            android:textSize="15dp"
+            android:maxLines="1"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+            android:id="@+id/add_account"
+            android:background="@drawable/edit_shape"
+            android:textColorHint="@color/colorPrimaryDark"
+            android:textColorHighlight="@color/colorPrimaryDark" />
+    </RelativeLayout>
+</RelativeLayout>
