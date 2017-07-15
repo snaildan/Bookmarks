@@ -85,6 +85,7 @@ public class AddActivity extends Activity {
         mDay=c.get(Calendar.DAY_OF_MONTH);
         updateDisplay();
         add_mark = (EditText) findViewById(R.id.add_mark);
+        add_save = (Button) findViewById(R.id.add_save);
         //保存按钮
         add_save.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -94,6 +95,8 @@ public class AddActivity extends Activity {
                 String add_PickDate_str = add_PickDate.getText().toString();
                 //入库
 
+                Intent intent = new Intent(AddActivity.this,HomeIndexActivity.class);
+                startActivity(intent);
             }
         });
     }
