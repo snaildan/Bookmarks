@@ -34,6 +34,10 @@ public class SortManageAdp extends BaseAdapter {
         this.list = list;
         this.notifyDataSetChanged();
     }
+    public void refresh(ArrayList<TableSort> list) {
+        this.list = list;
+        this.notifyDataSetChanged();
+    }
 
     // 自定义控件集合
     public final class ListSortView {
@@ -50,7 +54,7 @@ public class SortManageAdp extends BaseAdapter {
 
     @Override
     public Object getItem(int position) {
-        return null;
+        return this.list.get(position);
     }
 
     @Override
@@ -103,6 +107,7 @@ public class SortManageAdp extends BaseAdapter {
         listSortView.sort_state.setText(s_state_str);
         return convertView;
     }
+
 
     /**
      * 获取图片名称获取图片的资源id的方法

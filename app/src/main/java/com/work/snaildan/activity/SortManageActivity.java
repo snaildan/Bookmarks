@@ -4,11 +4,13 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -35,7 +37,7 @@ public class SortManageActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sort_manage);
         dbManage = new DbManager(this);
-        SortManageAdp sortManageAdp = new SortManageAdp(this);
+        final SortManageAdp sortManageAdp = new SortManageAdp(this);
         //返回按钮
         re_top_button = (ImageView) findViewById(R.id.re_top_button);
         re_top_button.setOnClickListener(new View.OnClickListener() {
@@ -64,11 +66,40 @@ public class SortManageActivity extends Activity {
             }
         });
         //获取列表
-        ArrayList<TableSort> tableSorts = dbManage.sqlQuery("table_sort");
         ListView listView = (ListView) findViewById(R.id.list_sort_manage);
+        final ArrayList<TableSort> tableSorts = dbManage.sqlQuery("table_sort");
         sortManageAdp.setList(tableSorts);
         listView.setAdapter(sortManageAdp);
+        Log.i("dddd-----","dddddddddddddd===");
+
+        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view,int position, long id) {
+                final int pos = position;
+                AlertDialog.Builder builder = new AlertDialog.Builder(SortManageActivity.this);
+                builder.setTitle("删除该条目");
+                builder.setMessage("确认要删除该条目吗?");
+                builder.setPositiveButton("删除",
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog,int which) {
+                            //删除数据
+                            TableSort tb_del = (TableSort)sortManageAdp.getItem(pos);
+                            String tb_del_id_ = Integer.toString(tb_del.get_id());
+                            String[] tb_del_id = new String[]{tb_del_id_};
+                            dbManage.delById("table_sort",tb_del_id);
+                            Log.i("tb_del------", "onItemLongClick:"+pos+"数据库id："+tb_del.get_id());
+                            tableSorts.remove(pos);
+                            sortManageAdp.notifyDataSetChanged();
+                            Toast.makeText(SortManageActivity.this,"删除成功！",Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                builder.setNegativeButton("取消", null);
+                builder.create().show();
+                return false;
+            }
+        });
     }
+
     //自定义对话框初始化
     public void showEditDialog(View view) {
         sortAddDialog = new SortAddDialog(this,R.style.loading_dialog);

@@ -81,6 +81,7 @@ public class SortAddDialog extends Dialog {
                     dbManage.add(tableSort);
                     dbManage.closeDB();
                     Toast.makeText(context,"新类别保存成功！"+add_sortName_str,Toast.LENGTH_SHORT).show();
+                    dismiss();
                 }
             }
         });
