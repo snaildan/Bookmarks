@@ -79,7 +79,7 @@ public class AddActivity extends Activity {
         spinner_type = (Spinner)findViewById(R.id.add_spinner_type);
         spinner_sort = (Spinner)findViewById(R.id.add_spinner_sort);
         initTypeSpinner();
-        initSortSpinner();
+        initSortSpinner("0");
         //日期控件
         add_PickDate = (Button)findViewById(R.id.add_PickDate);
         add_PickDate.setOnClickListener(new View.OnClickListener(){
@@ -139,9 +139,9 @@ public class AddActivity extends Activity {
         spinner_type.setOnItemSelectedListener(new SpinnerOnSelectedListener());
     }
     //类别下拉框数据初始化
-    private void initSortSpinner() {
+    private void initSortSpinner(String type) {
         dbManage = new DbManager(this);
-        ArrayList<TableSort> tableSorts = dbManage.sqlQuery("table_sort");
+        ArrayList<TableSort> tableSorts = dbManage.QuerySortByType(type);
         int[] sorts_pic = new int[tableSorts.size()];
         String[] sorts_name = new String[tableSorts.size()];
         for(int i = 0;i < tableSorts.size(); i ++){
@@ -166,6 +166,13 @@ public class AddActivity extends Activity {
                 TextView tv = (TextView)ll.findViewWithTag("tagSpinnerView");
                 spinner_type_str = (String)tv.getText();
                 Log.i("spinner_type----","selected===========>"+ spinner_type_str);
+                //按类型刷新类别表
+                if(spinner_type_str.equals("支出")){
+                    initSortSpinner("0");
+                }else{
+                    initSortSpinner("1");
+                }
+
             }else if(adapterView.getId() == R.id.add_spinner_sort){
                 LinearLayout ll = (LinearLayout)view;
                 TextView tv = (TextView)ll.findViewWithTag("tagSpinnerView");
