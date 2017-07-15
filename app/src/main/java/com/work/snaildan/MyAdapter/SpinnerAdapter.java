@@ -17,9 +17,9 @@ import android.widget.TextView;
 public class SpinnerAdapter extends BaseAdapter {
     private Context ctx;
     private int drawableIDs[];
-    private int stringIDs[];
+    private String stringIDs[];
 
-    public SpinnerAdapter(Context ctx, int DrawableIDs[], int StringIDs[]){
+    public SpinnerAdapter(Context ctx, int DrawableIDs[], String StringIDs[]){
         this.ctx = ctx;
         this.drawableIDs = DrawableIDs;
         this.stringIDs = StringIDs;

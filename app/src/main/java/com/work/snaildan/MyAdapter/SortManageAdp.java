@@ -83,10 +83,9 @@ public class SortManageAdp extends BaseAdapter {
         } else {
             listSortView = (ListSortView) convertView.getTag();
         }
-        String stra = bean.getIcon().substring(11,bean.getIcon().length());
-
-        int res_id = getResource(stra);
-        Log.i("snail----",res_id+"====="+stra);
+        //截取后的icon展示
+        int res_id = getResource(bean.getIcon());
+        Log.i("snail----",res_id+"====="+res_id);
         listSortView.sort_icon.setBackgroundResource(res_id);
         String s_name = "名称："+bean.getSortName();
         String s_type = bean.getType();
@@ -98,7 +97,7 @@ public class SortManageAdp extends BaseAdapter {
             s_type = "类型：支出";
         }
         if(s_state == 1){
-            s_state_str = "状态：用户";
+            s_state_str = "状态：开启";
         }else{
             s_state_str = "状态：系统";
         }
@@ -117,6 +116,7 @@ public class SortManageAdp extends BaseAdapter {
      */
     public int getResource(String imageName) {
         Context ctx = myContext;
+        imageName = imageName.substring(11,imageName.length());
         int resId = myContext.getResources().getIdentifier(imageName, "drawable", ctx.getPackageName());
         return resId;
     }

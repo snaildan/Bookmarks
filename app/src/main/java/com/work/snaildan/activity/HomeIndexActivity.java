@@ -54,11 +54,8 @@ public class HomeIndexActivity extends Activity {
             }
         });
         //deleteDatabase("bookmarks_db.db");
-        sqlQuery();
+        dbManage.sqlQuery("table_sort");
         //String[] aa = new String[]{"23"};
         //dbManage.delById("table_sort",aa);
-    }
-    private void sqlQuery(){
-        dbManage.sqlQuery("table_sort");
     }
 }

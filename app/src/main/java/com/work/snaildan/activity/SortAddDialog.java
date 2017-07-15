@@ -102,7 +102,7 @@ public class SortAddDialog extends Dialog {
     //类型下拉框数据初始化
     private void initSortSpinner() {
         int[] typePics = {R.drawable.icon_qtzx_qtzc,R.drawable.icon_qtsr};
-        int[] types = { R.string.qtzc,R.string.qtsr};
+        String[] types = {"支出","收入"};
         SpinnerAdapter adapter = new SpinnerAdapter(context,typePics,types);
         sort_spinner.setAdapter(adapter);
         sort_spinner.setSelection(0, true);
