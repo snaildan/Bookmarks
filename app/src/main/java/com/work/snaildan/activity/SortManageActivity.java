@@ -70,12 +70,15 @@ public class SortManageActivity extends Activity {
         final ArrayList<TableSort> tableSorts = dbManage.sqlQuery("table_sort");
         sortManageAdp.setList(tableSorts);
         listView.setAdapter(sortManageAdp);
-        Log.i("dddd-----","dddddddddddddd===");
-
+        //长按事件
         listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view,int position, long id) {
                 final int pos = position;
+                //系统项目不可删除
+                if (pos < 11) {
+                    return false;
+                }
                 AlertDialog.Builder builder = new AlertDialog.Builder(SortManageActivity.this);
                 builder.setTitle("删除该条目");
                 builder.setMessage("确认要删除该条目吗?");
