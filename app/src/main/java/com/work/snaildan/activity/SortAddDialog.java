@@ -69,7 +69,6 @@ public class SortAddDialog extends Dialog {
                 }else{
                     //Log.i("Debug_sortAdd-------","输入数据为："+add_sortName_str);
                     //信息入库
-
                     int s_type_i = sort_spinner.getSelectedItemPosition();
                     if(s_type_i == 1){
                         s_sortCode = "100";
@@ -78,7 +77,7 @@ public class SortAddDialog extends Dialog {
                         s_sortCode = "101";
                         s_type_s = "0";
                     }
-                    TableSort tableSort = new TableSort(s_sortCode,add_sortName_str,s_type_s,0,"R.drawable.icon_gp");
+                    TableSort tableSort = new TableSort(s_sortCode,add_sortName_str,s_type_s,1,"R.drawable.icon_zdy");
                     dbManage.add(tableSort);
                     dbManage.closeDB();
                     Toast.makeText(context,"新类别保存成功！"+add_sortName_str,Toast.LENGTH_SHORT).show();
