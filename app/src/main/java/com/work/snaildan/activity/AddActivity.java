@@ -16,13 +16,20 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.work.snaildan.MyAdapter.SpinnerAdapter;
 import com.work.snaildan.db.DbManager;
+import com.work.snaildan.dbclass.TableAccount;
 import com.work.snaildan.dbclass.TableSort;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 
 public class AddActivity extends Activity {
     private ImageView re_top_button;
@@ -30,6 +37,7 @@ public class AddActivity extends Activity {
     private ImageView re_top_done_i;
     private TextView re_top_done_t;
     public EditText add_mark;
+    public int account;
     public EditText add_account;
     private Spinner spinner_type;
     private Spinner spinner_sort;
@@ -93,7 +101,28 @@ public class AddActivity extends Activity {
                 String add_mark_str = add_mark.getText().toString();
                 String add_account_str = add_account.getText().toString();
                 String add_PickDate_str = add_PickDate.getText().toString();
+                if(add_account_str.equals("")){
+                    Toast.makeText(AddActivity.this,"请输入金额！",Toast.LENGTH_SHORT).show();
+                }else{
+                    account = Integer.parseInt(add_account_str);
+                    //Toast.makeText(AddActivity.this,"输入金额为："+account,Toast.LENGTH_SHORT).show();
+                }
+                if(spinner_sort_str == null){
+                    Toast.makeText(AddActivity.this,"请选择类别！",Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                SimpleDateFormat format =  new SimpleDateFormat("yyyy-MM-dd");
+                Date date = null;
+                try {
+                    date = format.parse(add_PickDate_str);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                Log.i("tableAccount----", "字符串转时间戳"+date.getTime());
                 //入库
+                TableAccount tableAccount = new TableAccount(account,spinner_sort_str,add_mark_str,date.getTime());
+                dbManage.add(tableAccount);
+                dbManage.closeDB();
 
                 Intent intent = new Intent(AddActivity.this,HomeIndexActivity.class);
                 startActivity(intent);
@@ -116,8 +145,13 @@ public class AddActivity extends Activity {
         int[] sorts_pic = new int[tableSorts.size()];
         String[] sorts_name = new String[tableSorts.size()];
         for(int i = 0;i < tableSorts.size(); i ++){
-            sorts_name[i] = tableSorts.get(i).getSortName();
-            sorts_pic[i] = getResource(tableSorts.get(i).getIcon());
+            if(i == 0){
+                sorts_name[i] = "请选择";
+                sorts_pic[i] = R.drawable.icon_xz;
+            }else{
+                sorts_name[i] = tableSorts.get(i).getSortName();
+                sorts_pic[i] = getResource(tableSorts.get(i).getIcon());
+            }
             Log.i("------","sorts_pic："+tableSorts.get(i).getIcon()+" sorts_picid："+getResource(tableSorts.get(i).getIcon()));
         }
         SpinnerAdapter adapter = new SpinnerAdapter(this,sorts_pic,sorts_name);
