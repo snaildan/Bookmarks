@@ -104,6 +104,25 @@ public class DbManager{
             return null;
         }
     }
+    //按类别取类别表中数据
+    public ArrayList QuerySortByType(String Type) {
+        ArrayList<TableSort> tableSorts = new ArrayList<>();
+        Cursor c_ = db.rawQuery("select * from table_sort where Type = ?", new String[]{Type});
+        while (c_.moveToNext()) {
+            TableSort tableSort = new TableSort();
+            tableSort._id  = c_.getInt(c_.getColumnIndex("_id"));
+            tableSort.SortCode = c_.getString(c_.getColumnIndex("SortCode"));
+            tableSort.SortName = c_.getString(c_.getColumnIndex("SortName"));
+            tableSort.Type = c_.getString(c_.getColumnIndex("Type"));
+            tableSort.State = c_.getInt(c_.getColumnIndex("State"));
+            tableSort.Icon = c_.getString(c_.getColumnIndex("Icon"));
+            Log.i("db-query----", "_id=" + tableSort._id  + " SortName=" + tableSort.SortName + " Type=" + tableSort.Type + " SortCode=" + tableSort.SortCode+ " Icon=" + tableSort.Icon);
+            tableSorts.add(tableSort);
+        }
+        c_.close();
+        return tableSorts;
+    }
+
     //删除数据
     public void  delById(String tableName,String[] id){
         if(tableName.equals(table_account)) {
