@@ -81,7 +81,8 @@ public class DbManager{
                 Log.i("db-query----","_id="+tableAccount._id+" SortCode="+tableAccount.SortCode+" AccMoney="+tableAccount.AccMoney+" NoteDate="+tableAccount.NoteDate+" Remark="+tableAccount.Remark);
                 tableAccounts.add(tableAccount);
             }
-            return null;
+            c.close();
+            return tableAccounts;
         }else if(tableName.equals(table_sort)) {
             ArrayList<TableSort> tableSorts = new ArrayList<>();
             Cursor c_ = db.rawQuery("select * from table_sort where _id >= ?", new String[]{"0"});
@@ -104,10 +105,10 @@ public class DbManager{
             return null;
         }
     }
-    //按类别取类别表中数据
+    //遍历类别表中数据
     public ArrayList QuerySortByType(String Type) {
         ArrayList<TableSort> tableSorts = new ArrayList<>();
-        Cursor c_ = db.rawQuery("select * from table_sort where Type = ?", new String[]{Type});
+        Cursor c_ = db.rawQuery("select * from table_sort where _id >= ?", new String[]{"0"});
         while (c_.moveToNext()) {
             TableSort tableSort = new TableSort();
             tableSort._id  = c_.getInt(c_.getColumnIndex("_id"));

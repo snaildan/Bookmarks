@@ -54,7 +54,10 @@ public class HomeIndexActivity extends Activity {
             }
         });
         //deleteDatabase("bookmarks_db.db");
-        dbManage.QuerySortByType("1");
-        dbManage.QuerySortByType("0");
+        //dbManage.QuerySortByType("1");
+        //dbManage.QuerySortByType("0");
+        dbManage.sqlQuery("table_account");
+        //String[] id = new String[]{"10"};
+        //dbManage.delById("table_account",id);
     }
 }
