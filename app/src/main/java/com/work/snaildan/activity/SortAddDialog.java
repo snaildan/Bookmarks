@@ -16,6 +16,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.work.snaildan.MyAdapter.SortManageAdp;
 import com.work.snaildan.MyAdapter.SpinnerAdapter;
 import com.work.snaildan.dbclass.TableSort;
 import com.work.snaildan.db.DbManager;
@@ -31,6 +32,11 @@ public class SortAddDialog extends Dialog {
     private DbManager dbManage;
     private String s_sortCode;
     private String s_type_s;
+    private SortManageAdp sortManageAdp;
+
+    public void setMAdapter(SortManageAdp sortManageAdp){
+        this.sortManageAdp = sortManageAdp;
+    }
 
     //默认皮肤theme不设定即可自行设置
     public SortAddDialog(Activity context, int theme) {
@@ -80,7 +86,9 @@ public class SortAddDialog extends Dialog {
                     TableSort tableSort = new TableSort(s_sortCode,add_sortName_str,s_type_s,1,"R.drawable.icon_zdy");
                     dbManage.add(tableSort);
                     dbManage.closeDB();
-                    Toast.makeText(context,"新类别保存成功！"+add_sortName_str,Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context,add_sortName_str+"类别保存成功！",Toast.LENGTH_SHORT).show();
+                    //sortManageAdp传入并将新项目add
+                    sortManageAdp.addList(tableSort);
                     dismiss();
                 }
             }

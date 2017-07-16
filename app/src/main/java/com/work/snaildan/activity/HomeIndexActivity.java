@@ -59,5 +59,6 @@ public class HomeIndexActivity extends Activity {
         dbManage.sqlQuery("table_account");
         //String[] id = new String[]{"10"};
         //dbManage.delById("table_account",id);
+        //today_add.setText("记账");
     }
 }

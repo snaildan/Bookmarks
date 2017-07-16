@@ -108,7 +108,7 @@ public class DbManager{
     //遍历类别表中数据
     public ArrayList QuerySortByType(String Type) {
         ArrayList<TableSort> tableSorts = new ArrayList<>();
-        Cursor c_ = db.rawQuery("select * from table_sort where _id >= ?", new String[]{"0"});
+        Cursor c_ = db.rawQuery("select * from table_sort where Type = ?", new String[]{Type});
         while (c_.moveToNext()) {
             TableSort tableSort = new TableSort();
             tableSort._id  = c_.getInt(c_.getColumnIndex("_id"));

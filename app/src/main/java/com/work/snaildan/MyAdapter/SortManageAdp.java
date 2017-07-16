@@ -34,8 +34,13 @@ public class SortManageAdp extends BaseAdapter {
         this.list = list;
         this.notifyDataSetChanged();
     }
-    public void refresh(ArrayList<TableSort> list) {
-        this.list = list;
+
+    public void addList(TableSort tableSort){
+        if (this.list==null)
+            return;
+        if(!this.list.contains(tableSort)){
+            this.list.add(tableSort);
+        }
         this.notifyDataSetChanged();
     }
 

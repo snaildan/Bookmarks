@@ -62,7 +62,7 @@ public class SortManageActivity extends Activity {
         re_top_done_i.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                showEditDialog(v);
+                showEditDialog(v,sortManageAdp);
             }
         });
         //获取列表
@@ -104,8 +104,9 @@ public class SortManageActivity extends Activity {
     }
 
     //自定义对话框初始化
-    public void showEditDialog(View view) {
+    public void showEditDialog(View view,SortManageAdp sortManageAdp) {
         sortAddDialog = new SortAddDialog(this,R.style.loading_dialog);
+        sortAddDialog.setMAdapter(sortManageAdp);
         sortAddDialog.show();
     }
 
