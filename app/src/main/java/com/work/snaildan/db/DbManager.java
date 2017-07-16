@@ -8,13 +8,11 @@ import android.util.Log;
 
 import com.work.snaildan.dbclass.TableAccount;
 import com.work.snaildan.dbclass.TableSort;
+import com.work.snaildan.tools.Utools;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
-import java.util.Map;
 
-import static android.icu.lang.UCharacter.GraphemeClusterBreak.T;
 
 public class DbManager{
     private DbHelper dbHelper;
@@ -22,9 +20,10 @@ public class DbManager{
     private String table_account = "table_account";
     private String table_sort = "table_sort";
     private String table_budget = "table_budget";
-    private TableSort tableSort;
+    public Utools utools;
 
     public DbManager(Context context){
+        utools = new Utools();
         dbHelper = new DbHelper(context);
         db = dbHelper.getWritableDatabase();
     }
@@ -52,8 +51,9 @@ public class DbManager{
                 cv.put("SortCode",((TableAccount) t).getSortCode());
                 cv.put("Remark",((TableAccount) t).getRemark());
                 cv.put("NoteDate",((TableAccount) t).getNoteDate());
+                cv.put("Type",((TableAccount) t).getType());
                 db.insert(this.table_account,null,cv);
-                Log.i("db-add----","SortCode="+((TableAccount) t).getSortCode()+" AccMoney="+((TableAccount) t).getAccMoney()+" Remark="+((TableAccount) t).getRemark()+" NoteDate="+((TableAccount) t).getNoteDate());
+                Log.i("db-add----","SortCode="+((TableAccount) t).getSortCode()+" Type="+((TableAccount) t).getType()+" AccMoney="+((TableAccount) t).getAccMoney()+" Remark="+((TableAccount) t).getRemark()+" NoteDate="+((TableAccount) t).getNoteDate());
                 db.setTransactionSuccessful();
                 return true;
            // }else if(t instanceof table_budget){
@@ -70,15 +70,16 @@ public class DbManager{
     public ArrayList sqlQuery(String tableName){
         if(tableName.equals(table_account)) {
             ArrayList<TableAccount> tableAccounts = new ArrayList<>();
-            Cursor c =db.rawQuery("select * from table_account where _id >= ?",new String[]{"0"});
+            Cursor c =db.rawQuery("select * from table_account where _id >= ? order by NoteDate",new String[]{"0"});
             while (c.moveToNext()){
                 TableAccount tableAccount = new TableAccount();
                 tableAccount._id  = c.getInt(c.getColumnIndex("_id"));
                 tableAccount.AccMoney = c.getFloat(c.getColumnIndex("AccMoney"));
                 tableAccount.SortCode = c.getString(c.getColumnIndex("SortCode"));
                 tableAccount.Remark = c.getString(c.getColumnIndex("Remark"));
+                tableAccount.Type = c.getString(c.getColumnIndex("Type"));
                 tableAccount.NoteDate = c.getLong(c.getColumnIndex("NoteDate"));
-                Log.i("db-query----","_id="+tableAccount._id+" SortCode="+tableAccount.SortCode+" AccMoney="+tableAccount.AccMoney+" NoteDate="+tableAccount.NoteDate+" Remark="+tableAccount.Remark);
+                Log.i("db-query----","_id="+tableAccount._id+" SortCode="+tableAccount.SortCode+" Type="+tableAccount.Type+" AccMoney="+tableAccount.AccMoney+" NoteDate="+tableAccount.NoteDate+" Remark="+tableAccount.Remark);
                 tableAccounts.add(tableAccount);
             }
             c.close();
@@ -105,7 +106,7 @@ public class DbManager{
             return null;
         }
     }
-    //遍历类别表中数据
+    //按类型取出类别表中数据
     public ArrayList QuerySortByType(String Type) {
         ArrayList<TableSort> tableSorts = new ArrayList<>();
         Cursor c_ = db.rawQuery("select * from table_sort where Type = ?", new String[]{Type});
@@ -122,6 +123,24 @@ public class DbManager{
         }
         c_.close();
         return tableSorts;
+    }
+    //本月收入、支出总额
+    public String monthTotal(String Type){
+        String monthFirstDay = utools.getMonthFirstDay();
+        String monthLastDay = utools.getMonthLastDay();
+        long firstLong = utools.StringToU(monthFirstDay,"yyyy-MM-dd");
+        long lastLong = utools.StringToU(monthLastDay,"yyyy-MM-dd");
+        Log.i("DB-monthTotal----","当前月第一天的时间戳："+firstLong);
+        Log.i("DB-monthTotal----","当前月最后一天的时间戳："+lastLong);
+        //转字符串
+        String firstString = firstLong + "";
+        String lastString = lastLong + "";
+        Cursor c = db.rawQuery("select sum(AccMoney) as totalin from table_account where Type = ? and NoteDate > ? and NoteDate < ?", new String[]{Type,firstString,lastString});
+        while (c.moveToNext()) {
+
+        }
+        c.close();
+        return "1";
     }
 
     //删除数据

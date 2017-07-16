@@ -3,7 +3,6 @@ package com.work.snaildan.activity;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -23,13 +22,10 @@ import com.work.snaildan.db.DbManager;
 import com.work.snaildan.dbclass.TableAccount;
 import com.work.snaildan.dbclass.TableSort;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.Locale;
+
+import com.work.snaildan.tools.Utools;
 
 public class AddActivity extends Activity {
     private ImageView re_top_button;
@@ -52,10 +48,12 @@ public class AddActivity extends Activity {
     public String mMonthChar;
     public String mDayChar;
     private DbManager dbManage;
+    public Utools utools;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add);
+        utools = new Utools();
         //返回按钮
         re_top_button = (ImageView)findViewById(R.id.re_top_button);
         re_top_button.setOnClickListener(new View.OnClickListener(){
@@ -111,16 +109,13 @@ public class AddActivity extends Activity {
                     Toast.makeText(AddActivity.this,"请选择类别！",Toast.LENGTH_SHORT).show();
                     return;
                 }
-                SimpleDateFormat format =  new SimpleDateFormat("yyyy-MM-dd");
-                Date date = null;
-                try {
-                    date = format.parse(add_PickDate_str);
-                } catch (ParseException e) {
-                    e.printStackTrace();
+                long dateTimeRe =  utools.StringToU(add_PickDate_str,"yyyy-MM-dd");
+                String spinner_type_str1 = "1";
+                if(spinner_type_str == null || spinner_type_str.equals("支出")){
+                    spinner_type_str1 = "0";
                 }
-                Log.i("tableAccount----", "字符串转时间戳"+date.getTime());
                 //入库
-                TableAccount tableAccount = new TableAccount(account,spinner_sort_str,add_mark_str,date.getTime());
+                TableAccount tableAccount = new TableAccount(account,spinner_sort_str,add_mark_str,dateTimeRe,spinner_type_str1);
                 dbManage.add(tableAccount);
                 dbManage.closeDB();
 
@@ -144,15 +139,16 @@ public class AddActivity extends Activity {
         ArrayList<TableSort> tableSorts = dbManage.QuerySortByType(type);
         int[] sorts_pic = new int[tableSorts.size()];
         String[] sorts_name = new String[tableSorts.size()];
-        for(int i = 0;i < tableSorts.size(); i ++){
+        for(int i = 0;i < tableSorts.size(); i++){
             if(i == 0){
                 sorts_name[i] = "请选择";
                 sorts_pic[i] = R.drawable.icon_xz;
             }else{
                 sorts_name[i] = tableSorts.get(i).getSortName();
-                sorts_pic[i] = getResource(tableSorts.get(i).getIcon());
+                sorts_pic[i] = utools.getResource(this,tableSorts.get(i).getIcon());
+                //sorts_pic[i] = getResource(tableSorts.get(i).getIcon());
             }
-            Log.i("------","sorts_pic："+tableSorts.get(i).getIcon()+" sorts_picid："+getResource(tableSorts.get(i).getIcon()));
+            Log.i("------","sorts_pic："+tableSorts.get(i).getIcon()+" sorts_picid："+sorts_pic[i]);
         }
         SpinnerAdapter adapter = new SpinnerAdapter(this,sorts_pic,sorts_name);
         spinner_sort.setAdapter(adapter);
@@ -220,12 +216,5 @@ public class AddActivity extends Activity {
                 return new DatePickerDialog(this,mDateSetListener, mYear, mMonth, mDay);
         }
         return null;
-    }
-    //获取图片名称获取图片的资源id的方法
-    public int getResource(String imageName) {
-        Context ctx = this;
-        imageName = imageName.substring(11,imageName.length());
-        int resId = ctx.getResources().getIdentifier(imageName, "drawable", ctx.getPackageName());
-        return resId;
     }
 }

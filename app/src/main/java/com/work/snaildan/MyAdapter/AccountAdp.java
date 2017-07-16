@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.work.snaildan.activity.R;
 import com.work.snaildan.dbclass.TableAccount;
 import com.work.snaildan.dbclass.TableSort;
+import com.work.snaildan.tools.Utools;
 
 import java.util.ArrayList;
 
@@ -32,11 +33,6 @@ public class AccountAdp extends BaseAdapter {
         this.list = list;
         this.notifyDataSetChanged();
     }
-    public void refresh(ArrayList<TableAccount> list) {
-        this.list = list;
-        this.notifyDataSetChanged();
-    }
-
     // 自定义控件集合
     public final class ListSortView {
         public ImageView acc_icon;
@@ -93,24 +89,17 @@ public class AccountAdp extends BaseAdapter {
         s_money = "金额：￥"+s_money;
         listSortView.acc_money.setText(s_money);
         String s_date = Long.toString(bean.getNoteDate());
-       listSortView.acc_noteDate.setText(s_date);
-
-
+        listSortView.acc_noteDate.setText(s_date);
         String acc_type = "类型："+bean.getSortCode();
-        String acc_code = "类别：支出";
-       listSortView.acc_type.setText(acc_type);
-       listSortView.acc_code.setText(acc_code);
+        String acc_code = "类别：收入";
+        if(bean.getType().equals("0")){
+            acc_code = "类别：支出";
+        }
+        Utools utools = new Utools();
+        String dTime = utools.stampToDate(bean.getNoteDate());
+        listSortView.acc_noteDate.setText(dTime);
+        listSortView.acc_type.setText(acc_type);
+        listSortView.acc_code.setText(acc_code);
         return convertView;
-    }
-    /**
-     * 获取图片名称获取图片的资源id的方法
-     *
-     * @param imageName
-     * @return
-     */
-    public int getResource(String imageName) {
-        Context ctx = myContext;
-        int resId = myContext.getResources().getIdentifier(imageName, "drawable", ctx.getPackageName());
-        return resId;
     }
 }

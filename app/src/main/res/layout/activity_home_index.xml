@@ -44,7 +44,8 @@
                 android:layout_marginTop="60dp"
                 android:layout_marginLeft="150dp"
                 android:textColor="#000000"
-                android:text="¥ 863"
+                android:id="@+id/index_total_in"
+                android:text="¥ 888"
                 android:textStyle="bold"
                 android:textSize="16sp" />
             <TextView
@@ -61,7 +62,8 @@
                 android:layout_marginTop="100dp"
                 android:layout_marginLeft="150dp"
                 android:textColor="#000000"
-                android:text="¥ 86300"
+                android:id="@+id/index_total_out"
+                android:text="¥ 300"
                 android:textStyle="bold"
                 android:textSize="16sp" />
             <TextView
@@ -77,8 +79,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="140dp"
                 android:layout_marginLeft="150dp"
+                android:id="@+id/index_budget"
                 android:textColor="#000000"
-                android:text="¥ 8630"
+                android:text="¥ 6666"
                 android:textStyle="bold"
                 android:textSize="16sp" />
         </RelativeLayout>
@@ -131,12 +134,14 @@
             android:textColor="#26ec0c"
             android:textStyle="bold"
             android:textSize="14sp"
-            android:text="¥ 0.0"/>
+            android:id="@+id/index_today_in"
+            android:text="¥ 100.0"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="50dp"
             android:layout_marginLeft="50dp"
+            android:id="@+id/index_date"
             android:text="2017-07-07"/>
         <TextView
             android:layout_width="wrap_content"
@@ -146,7 +151,8 @@
             android:textColor="#c01616"
             android:textStyle="bold"
             android:textSize="14sp"
-            android:text="¥ -90.0"/>
+            android:id="@+id/index_today_out"
+            android:text="¥ -0.0"/>
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="match_parent"

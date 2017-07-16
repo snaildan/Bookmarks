@@ -10,14 +10,24 @@ public class TableAccount {
     public String SortCode;//先对应table_sort：SortName
     public String Remark;
     public long NoteDate;
+    public String Type;
 
     public TableAccount(){}
 
-    public TableAccount(float accMoney, String sortCode, String remark, long noteDate) {
+    public TableAccount(float accMoney, String sortCode, String remark, long noteDate,String type) {
         AccMoney = accMoney;
         SortCode = sortCode;
         Remark = remark;
         NoteDate = noteDate;
+        Type = type;
+    }
+
+    public String getType() {
+        return Type;
+    }
+
+    public void setType(String type) {
+        Type = type;
     }
 
     public int get_id() {
