@@ -84,7 +84,7 @@ public class AccountAdp extends BaseAdapter {
         listSortView.acc_money.setText(s_money);
         String s_date = Long.toString(bean.getNoteDate());
         listSortView.acc_noteDate.setText(s_date);
-        String acc_type = "类型："+bean.getSortCode()+"    ";
+        String acc_type = "类型："+bean.getSortCode();
         String acc_code = "类别：收入";
         listSortView.acc_icon.setBackgroundResource(R.drawable.flow_icon_revenue);
         if(bean.getType().equals("0")){

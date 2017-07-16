@@ -2,6 +2,14 @@ package com.work.snaildan.activity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Matrix;
+import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -96,5 +104,24 @@ public class HomeIndexActivity extends Activity {
 
         String dateStr = utools.getTimestamp("yyyy年MM月dd日");
         index_date.setText(dateStr);
+
+        ImageView iv = (ImageView) findViewById(R.id.index_ld_b);
+
+        //漏斗图片合成
+        //背景部分，也就是上面的图形
+        Bitmap background = BitmapFactory.decodeResource(getResources(),R.drawable.right_r);
+        //遮罩，就是提取来部分
+        Bitmap mask = BitmapFactory.decodeResource(getResources(),R.drawable.half);
+        //画一个背景画布
+        Bitmap background_b = BitmapFactory.decodeResource(getResources(),R.drawable.loudou_bg);
+        Bitmap ld_Bitmap = Bitmap.createBitmap(background_b.getWidth(),background_b.getHeight(), background_b.getConfig());
+        Canvas canvas = new Canvas(ld_Bitmap);
+
+        Paint paint = new Paint();
+        canvas.drawBitmap(background, new Matrix(), paint);
+        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
+        canvas.drawBitmap(mask, new Matrix(), paint);
+
+        iv.setImageBitmap(ld_Bitmap);
     }
 }
