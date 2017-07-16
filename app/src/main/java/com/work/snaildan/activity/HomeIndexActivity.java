@@ -108,20 +108,37 @@ public class HomeIndexActivity extends Activity {
         ImageView iv = (ImageView) findViewById(R.id.index_ld_b);
 
         //漏斗图片合成
-        //背景部分，也就是上面的图形
-        Bitmap background = BitmapFactory.decodeResource(getResources(),R.drawable.right_r);
-        //遮罩，就是提取来部分
-        Bitmap mask = BitmapFactory.decodeResource(getResources(),R.drawable.half);
-        //画一个背景画布
-        Bitmap background_b = BitmapFactory.decodeResource(getResources(),R.drawable.loudou_bg);
-        Bitmap ld_Bitmap = Bitmap.createBitmap(background_b.getWidth(),background_b.getHeight(), background_b.getConfig());
-        Canvas canvas = new Canvas(ld_Bitmap);
+        //遮罩
+//        Bitmap mask = BitmapFactory.decodeResource(getResources(),R.drawable.half);
+//        //设置背景画布
+//        Bitmap background = BitmapFactory.decodeResource(getResources(),R.drawable.right_r);
+//        Bitmap bitmap = Bitmap.createBitmap(background.getWidth(),background.getHeight(), background.getConfig());
+//        //以此bitmap为基准，创建一个画布
+//        Canvas canvas = new Canvas(bitmap);
+//        Paint paint = new Paint();
+//        paint.setAntiAlias(true);
+//        canvas.drawBitmap(background, new Matrix(), paint);
+//        //设置图片相交情况下的处理方式
+//        //setXfermode：设置当绘制的图像出现相交情况时候的处理方式的,它包含的常用模式有：
+//        //PorterDuff.Mode.SRC_IN 取两层图像交集部分,只显示上层图像
+//        //PorterDuff.Mode.DST_IN 取两层图像交集部分,只显示下层图像
+//        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
+//        canvas.drawBitmap(mask, new Matrix(), paint);
+//
+//        iv.setImageBitmap(bitmap);
 
+
+        Bitmap mask = BitmapFactory.decodeResource(getResources(),R.drawable.right_r);
+        Bitmap background = BitmapFactory.decodeResource(getResources(),R.drawable.half);
+        Bitmap background_bg = BitmapFactory.decodeResource(getResources(),R.drawable.loudou_bg);
+        Bitmap bitmap = Bitmap.createBitmap(background_bg.getWidth(),background_bg.getHeight(), background_bg.getConfig());
+        //以此bitmap为基准，创建一个画布
+        Canvas canvas = new Canvas(bitmap);
+        canvas.drawBitmap(background, 70, 40, null);
         Paint paint = new Paint();
-        canvas.drawBitmap(background, new Matrix(), paint);
-        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
-        canvas.drawBitmap(mask, new Matrix(), paint);
-
-        iv.setImageBitmap(ld_Bitmap);
+        //paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
+        canvas.drawBitmap(mask, 35,40, paint);
+        //paint.setXfermode(null);
+        iv.setImageBitmap(bitmap);
     }
 }
