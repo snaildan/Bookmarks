@@ -8,6 +8,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.work.snaildan.db.DbManager;
+import com.work.snaildan.tools.Utools;
 
 public class HomeIndexActivity extends Activity {
     private DbManager dbManage;
@@ -21,11 +22,17 @@ public class HomeIndexActivity extends Activity {
     private TextView index_budget;
     private TextView index_today_in;
     private TextView index_today_out;
+    private TextView index_month;
+    public Utools utools;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_index);
         dbManage = new DbManager(this);
+        utools = new Utools();
+        index_month = (TextView)findViewById(R.id.index_month);
+        index_month.setText(utools.getTimestamp("M"));
+
         today_add = (ImageView)findViewById(R.id.today_add);
         today_add.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -75,16 +82,19 @@ public class HomeIndexActivity extends Activity {
         index_today_out = (TextView) findViewById(R.id.index_today_out);
 
         //数据库取出首页数据
-        String total_in_str = dbManage.monthTotal("1");
-        String total_out_str = "ddddd";
+        String total_in_str = "￥"+dbManage.monthTotal("1");
+        String total_out_str = "￥"+dbManage.monthTotal("0");
         index_total_in.setText(total_in_str);
         index_total_out.setText(total_out_str);
 
-        index_budget.setText("56789");
+        index_budget.setText("￥0.0");
 
-        index_today_in.setText("56789");
-        index_today_out.setText("56789");
+        String today_in_str = "￥"+dbManage.todayTotal("1");
+        String today_out_str = "￥"+dbManage.todayTotal("0");
+        index_today_in.setText(today_in_str);
+        index_today_out.setText(today_out_str);
 
-        index_date.setText("56789");
+        String dateStr = utools.getTimestamp("yyyy年MM月dd日");
+        index_date.setText(dateStr);
     }
 }

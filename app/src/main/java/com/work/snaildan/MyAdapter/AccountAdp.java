@@ -79,21 +79,17 @@ public class AccountAdp extends BaseAdapter {
         } else {
             listSortView = (ListSortView) convertView.getTag();
         }
-        //截取后的icon展示
-        if(bean.getSortCode() == "交通") {
-            listSortView.acc_icon.setBackgroundResource(R.drawable.flow_icon_outpay);
-        }else {
-            listSortView.acc_icon.setBackgroundResource(R.drawable.flow_icon_revenue);
-        }
         String s_money = Float.toString(bean.getAccMoney());
         s_money = "金额：￥"+s_money;
         listSortView.acc_money.setText(s_money);
         String s_date = Long.toString(bean.getNoteDate());
         listSortView.acc_noteDate.setText(s_date);
-        String acc_type = "类型："+bean.getSortCode();
+        String acc_type = "类型："+bean.getSortCode()+"    ";
         String acc_code = "类别：收入";
+        listSortView.acc_icon.setBackgroundResource(R.drawable.flow_icon_revenue);
         if(bean.getType().equals("0")){
             acc_code = "类别：支出";
+            listSortView.acc_icon.setBackgroundResource(R.drawable.flow_icon_outpay);
         }
         Utools utools = new Utools();
         String dTime = utools.stampToDate(bean.getNoteDate());

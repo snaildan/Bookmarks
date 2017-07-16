@@ -137,18 +137,14 @@ public class AddActivity extends Activity {
     private void initSortSpinner(String type) {
         dbManage = new DbManager(this);
         ArrayList<TableSort> tableSorts = dbManage.QuerySortByType(type);
-        int[] sorts_pic = new int[tableSorts.size()];
-        String[] sorts_name = new String[tableSorts.size()];
-        for(int i = 0;i < tableSorts.size(); i++){
-            if(i == 0){
-                sorts_name[i] = "请选择";
-                sorts_pic[i] = R.drawable.icon_xz;
-            }else{
-                sorts_name[i] = tableSorts.get(i).getSortName();
-                sorts_pic[i] = utools.getResource(this,tableSorts.get(i).getIcon());
-                //sorts_pic[i] = getResource(tableSorts.get(i).getIcon());
-            }
-            Log.i("------","sorts_pic："+tableSorts.get(i).getIcon()+" sorts_picid："+sorts_pic[i]);
+        int[] sorts_pic = new int[tableSorts.size()+1];
+        String[] sorts_name = new String[tableSorts.size()+1];
+        sorts_name[0] = "请选择";
+        sorts_pic[0] = R.drawable.icon_xz;
+        for(int i = 1;i < tableSorts.size()+1; i++){
+            sorts_name[i] = tableSorts.get(i-1).getSortName();
+            sorts_pic[i] = utools.getResource(this,tableSorts.get(i-1).getIcon());
+            Log.i("------","sorts_pic："+tableSorts.get(i-1).getIcon()+" sorts_picid："+sorts_pic[i-1]);
         }
         SpinnerAdapter adapter = new SpinnerAdapter(this,sorts_pic,sorts_name);
         spinner_sort.setAdapter(adapter);

@@ -33,9 +33,10 @@ public class Utools {
         int resId = ctx.getResources().getIdentifier(imageName, "drawable", ctx.getPackageName());
         return resId;
     }
-    //获取当前时间的月份：07
-    public String getMonthTimestamp() {
-        SimpleDateFormat getMonthFormat = new SimpleDateFormat("MM");
+    //获取当前时间：2017-07 or 07 or 2017-07-08
+    //FormatStr = "yyyy年-MM月-dd日" or "yyyy-MM" ......
+    public String getTimestamp(String FormatStr) {
+        SimpleDateFormat getMonthFormat = new SimpleDateFormat(FormatStr);
         String date = getMonthFormat.format(new java.util.Date());
         return date;
     }

@@ -126,6 +126,7 @@ public class DbManager{
     }
     //本月收入、支出总额
     public String monthTotal(String Type){
+        String total = null;
         String monthFirstDay = utools.getMonthFirstDay();
         String monthLastDay = utools.getMonthLastDay();
         long firstLong = utools.StringToU(monthFirstDay,"yyyy-MM-dd");
@@ -137,12 +138,25 @@ public class DbManager{
         String lastString = lastLong + "";
         Cursor c = db.rawQuery("select sum(AccMoney) as totalin from table_account where Type = ? and NoteDate > ? and NoteDate < ?", new String[]{Type,firstString,lastString});
         while (c.moveToNext()) {
-
+            total = c.getString(c.getColumnIndex("totalin"));
         }
+        Log.i("table_account----","每月支出、收入total："+total);
         c.close();
-        return "1";
+        return total;
     }
-
+    //本日收入、支出总额
+    public String todayTotal(String Type){
+        String total = null;
+        String dateStr = utools.getTimestamp("yyyy-MM-dd");
+        long todaylong = utools.StringToU(dateStr,"yyyy-MM-dd");
+        String today = todaylong + "";
+        Cursor c = db.rawQuery("select sum(AccMoney) as totalin from table_account where Type = ? and NoteDate = ?", new String[]{Type,today});
+        while (c.moveToNext()) {
+            total = c.getString(c.getColumnIndex("totalin"));
+        }
+        Log.i("table_account----","每日支出、收入total："+total);
+        return total;
+    }
     //删除数据
     public void  delById(String tableName,String[] id){
         if(tableName.equals(table_account)) {
