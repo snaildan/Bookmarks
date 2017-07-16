@@ -142,6 +142,9 @@ public class DbManager{
         }
         Log.i("table_account----","每月支出、收入total："+total);
         c.close();
+        if(total == null){
+            total = "0.0";
+        }
         return total;
     }
     //本日收入、支出总额
@@ -155,6 +158,9 @@ public class DbManager{
             total = c.getString(c.getColumnIndex("totalin"));
         }
         Log.i("table_account----","每日支出、收入total："+total);
+        if(total == null){
+            total = "0.0";
+        }
         return total;
     }
     //删除数据

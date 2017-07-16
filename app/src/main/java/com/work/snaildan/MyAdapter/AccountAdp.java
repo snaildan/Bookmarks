@@ -80,7 +80,7 @@ public class AccountAdp extends BaseAdapter {
             listSortView = (ListSortView) convertView.getTag();
         }
         String s_money = Float.toString(bean.getAccMoney());
-        s_money = "金额：￥"+s_money;
+        s_money = "金额：¥"+s_money;
         listSortView.acc_money.setText(s_money);
         String s_date = Long.toString(bean.getNoteDate());
         listSortView.acc_noteDate.setText(s_date);
