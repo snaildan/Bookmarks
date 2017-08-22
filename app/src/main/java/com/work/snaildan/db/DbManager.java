@@ -70,7 +70,7 @@ public class DbManager{
     public ArrayList sqlQuery(String tableName){
         if(tableName.equals(table_account)) {
             ArrayList<TableAccount> tableAccounts = new ArrayList<>();
-            Cursor c =db.rawQuery("select * from table_account where _id >= ? order by NoteDate",new String[]{"0"});
+            Cursor c =db.rawQuery("select * from table_account where _id >= ? order by NoteDate desc,_id desc",new String[]{"0"});
             while (c.moveToNext()){
                 TableAccount tableAccount = new TableAccount();
                 tableAccount._id  = c.getInt(c.getColumnIndex("_id"));
