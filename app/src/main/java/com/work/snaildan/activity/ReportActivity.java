@@ -1,12 +1,16 @@
 package com.work.snaildan.activity;
 
 import android.app.Activity;
+import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.SpannableString;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.ImageView;
 
 import com.github.mikephil.charting.animation.Easing;
@@ -23,10 +27,24 @@ import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.github.mikephil.charting.utils.ColorTemplate;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+
+import static com.work.snaildan.activity.AddActivity.DATE_DIALOG_ID;
 
 public class ReportActivity extends Activity implements OnChartValueSelectedListener, View.OnClickListener {
     private ImageView re_top_button;
     private ImageView re_piechart;
+    private Button report_enddate;
+    private Button report_startdate;
+
+    private int mType;
+    private int mYear;
+    private int mMonth;
+    private int mDay;
+    static final int DATE_DIALOG_ID_S = 0;
+    static final int DATE_DIALOG_ID_E = 1;
+    public String mMonthChar;
+    public String mDayChar;
 
     private PieChart mPieChart;
     //显示百分比
@@ -65,7 +83,81 @@ public class ReportActivity extends Activity implements OnChartValueSelectedList
                 startActivity(intent);
             }
         });
+        //日期控件
+        report_startdate = (Button)findViewById(R.id.report_startdate);
+        report_startdate.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View v){
+                mType = 1;
+                showDialog(DATE_DIALOG_ID_S);
+            }
+        });
+
+        report_enddate = (Button)findViewById(R.id.report_enddate);
+        report_enddate.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View v){
+                mType = 2;
+                showDialog(DATE_DIALOG_ID_E);
+            }
+        });
+
+        final Calendar c = Calendar.getInstance();
+        mYear=c.get(Calendar.YEAR);
+        mMonth=c.get(Calendar.MONTH);
+        mDay=c.get(Calendar.DAY_OF_MONTH);
         initView();
+    }
+    //日期控件
+    private void updateDisplay(DatePicker view){
+        if(mDay < 10){
+            mDayChar = "0";
+        }else{
+            mDayChar = "";
+        }
+        if(mMonth < 9){
+            mMonthChar = "0";
+        }else{
+            mMonthChar = "";
+        }
+        if(mType == 1) {
+            report_startdate.setText(
+                new StringBuilder()
+                    .append(mYear).append("-")
+                    .append(mMonthChar)
+                    .append(mMonth + 1).append("-")
+                    .append(mDayChar)
+                    .append(mDay).append(" ")
+            );
+        }else{
+            report_enddate.setText(
+                new StringBuilder()
+                    .append(mYear).append("-")
+                    .append(mMonthChar)
+                    .append(mMonth + 1).append("-")
+                    .append(mDayChar)
+                    .append(mDay).append(" ")
+            );
+        }
+    }
+    //日期控件
+    private DatePickerDialog.OnDateSetListener mDateSetListener = new DatePickerDialog.OnDateSetListener(){
+        public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth){
+            mYear = year;
+            mMonth = monthOfYear;
+            mDay = dayOfMonth;
+            updateDisplay(view);
+        }
+    };
+    //日期控件
+    protected Dialog onCreateDialog(int id){
+        switch (id){
+            case DATE_DIALOG_ID_S:
+                mType = 1;
+                return new DatePickerDialog(this,mDateSetListener, mYear, mMonth, mDay);
+            case DATE_DIALOG_ID_E:
+                mType = 2;
+                return new DatePickerDialog(this,mDateSetListener, mYear, mMonth, mDay);
+        }
+        return null;
     }
     //初始化View
     private void initView() {
@@ -123,7 +215,7 @@ public class ReportActivity extends Activity implements OnChartValueSelectedList
     //设置中间文字
     private SpannableString generateCenterSpannableText() {
         //原文：MPAndroidChart\ndeveloped by Philipp Jahoda
-        SpannableString s = new SpannableString("snaildan\n张丹出品必属精品！");
+        SpannableString s = new SpannableString("理财大师");
         //s.setSpan(new RelativeSizeSpan(1.7f), 0, 14, 0);
         //s.setSpan(new StyleSpan(Typeface.NORMAL), 14, s.length() - 15, 0);
         // s.setSpan(new ForegroundColorSpan(Color.GRAY), 14, s.length() - 15, 0);
@@ -134,7 +226,7 @@ public class ReportActivity extends Activity implements OnChartValueSelectedList
     }
     //设置数据
     private void setData(ArrayList<PieEntry> entries) {
-        PieDataSet dataSet = new PieDataSet(entries, "三年级一班");
+        PieDataSet dataSet = new PieDataSet(entries, "");
         dataSet.setSliceSpace(3f);
         dataSet.setSelectionShift(5f);
         //数据和颜色
@@ -175,7 +267,6 @@ public class ReportActivity extends Activity implements OnChartValueSelectedList
             case R.id.btn_show_percentage:
                 for (IDataSet<?> set : mPieChart.getData().getDataSets())
                     set.setDrawValues(!set.isDrawValuesEnabled());
-
                 mPieChart.invalidate();
                 break;
             //显示类型

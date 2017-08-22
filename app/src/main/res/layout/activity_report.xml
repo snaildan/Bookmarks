@@ -29,13 +29,14 @@
             android:id="@+id/re_start_time"
             android:background="@drawable/statistcs_start_time_bg"
             />
-        <TextView
+        <Button
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="35dp"
             android:layout_alignRight="@id/re_start_time"
             android:layout_marginRight="5dp"
             android:layout_marginTop="8dp"
-            android:text="2017-07-07"
+            android:id="@+id/report_startdate"
+            android:text="2017-08-08"
             android:textSize="16sp"
             android:gravity="center"
             android:background="@drawable/statistc_time_bg"/>
@@ -47,13 +48,14 @@
             android:background="@drawable/statistcs_end_time_bg"
             android:layout_below="@id/re_start_time"
             />
-        <TextView
+        <Button
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="35dp"
             android:layout_alignRight="@id/re_end_time"
             android:layout_marginRight="5dp"
             android:layout_marginTop="8dp"
-            android:text="2017-07-07"
+            android:id="@+id/report_enddate"
+            android:text="2017-08-08"
             android:textSize="16sp"
             android:gravity="center"
             android:layout_below="@id/re_start_time"
