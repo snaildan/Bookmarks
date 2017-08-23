@@ -88,6 +88,7 @@
             android:layout_width="190dp"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
+            android:id="@+id/income"
             android:layout_margin="5dp"
             android:background="@drawable/report_bottom2"
             android:clickable="true"/>

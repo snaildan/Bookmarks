@@ -163,6 +163,52 @@ public class DbManager{
         }
         return total;
     }
+    //按日期、统计查询收入、支出
+    public ArrayList typeTotal(String Type,String startD,String endD){
+        long startDlong = utools.StringToU(startD,"yyyy-MM-dd");
+        String startDs = startDlong + "";
+        long endDlong = utools.StringToU(endD,"yyyy-MM-dd");
+        String endDs = endDlong + "";
+        Cursor c;
+        if(Type.equals("2")){
+            c = db.rawQuery("select SortCode,sum(AccMoney) as totalin from table_account where NoteDate >= ? and NoteDate <= ? group by SortCode", new String[]{startDs,endDs});
+        }else{
+            c = db.rawQuery("select SortCode,sum(AccMoney) as totalin from table_account where Type = ? and NoteDate >= ? and NoteDate <= ? group by SortCode", new String[]{Type,startDs,endDs});
+        }
+        ArrayList<TableAccount> tableAccounts = new ArrayList<>();
+        while (c.moveToNext()) {
+            TableAccount tableAccount = new TableAccount();
+            tableAccount.AccMoney = c.getFloat(c.getColumnIndex("totalin"));
+            tableAccount.SortCode = c.getString(c.getColumnIndex("SortCode"));
+
+            Log.i("table_account----","total："+tableAccount.AccMoney);
+            Log.i("table_account----","类型："+tableAccount.SortCode);
+            tableAccounts.add(tableAccount);
+        }
+        c.close();
+        return tableAccounts;
+    }
+    //按日期、统计查询收入、支出总额
+    public Float reportTotal(String Type,String startD,String endD){
+        Float total = null;
+        long startDLong = utools.StringToU(startD,"yyyy-MM-dd");
+        long endDLong = utools.StringToU(endD,"yyyy-MM-dd");
+        String startDLongS = startDLong + "";
+        String endDLongS = endDLong + "";
+        Cursor c;
+        if(Type.equals("2")) {
+            c = db.rawQuery("select sum(AccMoney) as totalin from table_account where NoteDate >= ? and NoteDate <= ?", new String[]{startDLongS, endDLongS});
+        }else{
+            c = db.rawQuery("select sum(AccMoney) as totalin from table_account where Type = ? and NoteDate >= ? and NoteDate <= ?", new String[]{Type, startDLongS, endDLongS});
+        }
+        while (c.moveToNext()) {
+            total = c.getFloat(c.getColumnIndex("totalin"));
+        }
+        if(total == null){
+            total = 0.0f;
+        }
+        return total;
+    }
     //删除数据
     public void  delById(String tableName,String[] id){
         if(tableName.equals(table_account)) {
