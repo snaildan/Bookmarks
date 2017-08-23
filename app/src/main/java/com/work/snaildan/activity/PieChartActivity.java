@@ -23,7 +23,7 @@ import com.github.mikephil.charting.utils.ColorTemplate;
 import java.util.ArrayList;
 
 public class PieChartActivity extends Activity implements OnChartValueSelectedListener, View.OnClickListener {
-    private PieChart mPieChart;
+        private PieChart mPieChart;
     //显示百分比
     private Button btn_show_percentage;
     //显示类型

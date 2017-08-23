@@ -43,7 +43,7 @@ public class SortManageActivity extends Activity {
         re_top_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(SortManageActivity.this, HomeIndexActivity.class);
+                Intent intent = new Intent(SortManageActivity.this, MoreActivity.class);
                 startActivity(intent);
             }
         });
