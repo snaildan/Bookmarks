@@ -28,16 +28,23 @@ import com.github.mikephil.charting.utils.ColorTemplate;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Iterator;
 
-import static com.work.snaildan.activity.AddActivity.DATE_DIALOG_ID;
+import com.work.snaildan.db.DbManager;
+import com.work.snaildan.dbclass.TableAccount;
 
 public class ReportActivity extends Activity implements OnChartValueSelectedListener, View.OnClickListener {
     private ImageView re_top_button;
     private ImageView re_piechart;
+    private ImageView income;
+    private ImageView outpay;
     private Button report_enddate;
     private Button report_startdate;
 
     private int mType;
+    public String Mstartdate;
+    public String Menddate;
+
     private int mYear;
     private int mMonth;
     private int mDay;
@@ -45,6 +52,9 @@ public class ReportActivity extends Activity implements OnChartValueSelectedList
     static final int DATE_DIALOG_ID_E = 1;
     public String mMonthChar;
     public String mDayChar;
+    private DbManager dbManage;
+    public String sType = "2";
+    public float rTotal;
 
     private PieChart mPieChart;
     //显示百分比
@@ -76,14 +86,13 @@ public class ReportActivity extends Activity implements OnChartValueSelectedList
             }
         });
         re_piechart = (ImageView)findViewById(R.id.re_piechart);
-        re_piechart.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(ReportActivity.this,PieChartActivity.class);
-                startActivity(intent);
-            }
-        });
-        //日期控件
+        re_piechart.setOnClickListener(this);
+        outpay = (ImageView)findViewById(R.id.outpay);
+        outpay.setOnClickListener(this);
+        income = (ImageView)findViewById(R.id.income);
+        income.setOnClickListener(this);
+
+        //开始日期控件
         report_startdate = (Button)findViewById(R.id.report_startdate);
         report_startdate.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v){
@@ -91,7 +100,7 @@ public class ReportActivity extends Activity implements OnChartValueSelectedList
                 showDialog(DATE_DIALOG_ID_S);
             }
         });
-
+        //结束日期控件
         report_enddate = (Button)findViewById(R.id.report_enddate);
         report_enddate.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v){
@@ -99,15 +108,17 @@ public class ReportActivity extends Activity implements OnChartValueSelectedList
                 showDialog(DATE_DIALOG_ID_E);
             }
         });
-
         final Calendar c = Calendar.getInstance();
         mYear=c.get(Calendar.YEAR);
         mMonth=c.get(Calendar.MONTH);
         mDay=c.get(Calendar.DAY_OF_MONTH);
-        initView();
+
+        Mstartdate = report_startdate.getText().toString();
+        Menddate = report_enddate.getText().toString();
+        initView(Mstartdate,Menddate);
     }
-    //日期控件
-    private void updateDisplay(DatePicker view){
+    //日期控件更新展示
+    private void updateDisplay(){
         if(mDay < 10){
             mDayChar = "0";
         }else{
@@ -118,6 +129,7 @@ public class ReportActivity extends Activity implements OnChartValueSelectedList
         }else{
             mMonthChar = "";
         }
+        //两个日期控件的区分
         if(mType == 1) {
             report_startdate.setText(
                 new StringBuilder()
@@ -127,6 +139,7 @@ public class ReportActivity extends Activity implements OnChartValueSelectedList
                     .append(mDayChar)
                     .append(mDay).append(" ")
             );
+            Mstartdate = report_startdate.getText().toString();
         }else{
             report_enddate.setText(
                 new StringBuilder()
@@ -136,6 +149,7 @@ public class ReportActivity extends Activity implements OnChartValueSelectedList
                     .append(mDayChar)
                     .append(mDay).append(" ")
             );
+            Menddate = report_enddate.getText().toString();
         }
     }
     //日期控件
@@ -144,7 +158,7 @@ public class ReportActivity extends Activity implements OnChartValueSelectedList
             mYear = year;
             mMonth = monthOfYear;
             mDay = dayOfMonth;
-            updateDisplay(view);
+            updateDisplay();
         }
     };
     //日期控件
@@ -159,8 +173,15 @@ public class ReportActivity extends Activity implements OnChartValueSelectedList
         }
         return null;
     }
-    //初始化View
-    private void initView() {
+    //统计图初始化View
+    private void initView(String startD,String endD) {
+        //数据库准备数据
+        dbManage = new DbManager(this);
+        //1收入，0支出
+        ArrayList<TableAccount> tableAccount = dbManage.typeTotal(sType,startD,endD);
+        //总数
+        rTotal = dbManage.reportTotal(sType,startD,endD);
+
         //饼状图
         mPieChart = (PieChart) findViewById(R.id.mPieChart);
         mPieChart.setUsePercentValues(true);
@@ -183,20 +204,23 @@ public class ReportActivity extends Activity implements OnChartValueSelectedList
         mPieChart.setDrawCenterText(true);
 
         mPieChart.setRotationAngle(0);
-        // 触摸旋转
+        //触摸旋转
         mPieChart.setRotationEnabled(true);
         mPieChart.setHighlightPerTapEnabled(true);
 
         //变化监听
         mPieChart.setOnChartValueSelectedListener(this);
-
-        //模拟数据
         ArrayList<PieEntry> entries = new ArrayList<PieEntry>();
-        entries.add(new PieEntry(40, "优秀"));
-        entries.add(new PieEntry(20, "满分"));
-        entries.add(new PieEntry(30, "及格"));
-        entries.add(new PieEntry(10, "不及格"));
-
+        if(rTotal == 0.0) {
+            //模拟数据
+            entries.add(new PieEntry(100, "日期无数据"));
+        }else{
+            for(int i = 0;i < tableAccount.size();i++){
+                TableAccount tableAccounts = (TableAccount) tableAccount.get(i);
+                float ss = tableAccounts.getAccMoney()/rTotal*10;
+                entries.add(new PieEntry(ss, tableAccounts.getSortCode()));
+            }
+        }
         //设置数据
         setData(entries);
         mPieChart.animateY(1400, Easing.EasingOption.EaseInOutQuad);
@@ -215,7 +239,7 @@ public class ReportActivity extends Activity implements OnChartValueSelectedList
     //设置中间文字
     private SpannableString generateCenterSpannableText() {
         //原文：MPAndroidChart\ndeveloped by Philipp Jahoda
-        SpannableString s = new SpannableString("理财大师");
+        SpannableString s = new SpannableString("理财大师\n选择日期进行查询");
         //s.setSpan(new RelativeSizeSpan(1.7f), 0, 14, 0);
         //s.setSpan(new StyleSpan(Typeface.NORMAL), 14, s.length() - 15, 0);
         // s.setSpan(new ForegroundColorSpan(Color.GRAY), 14, s.length() - 15, 0);
@@ -263,6 +287,21 @@ public class ReportActivity extends Activity implements OnChartValueSelectedList
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            //统计按钮
+            case R.id.re_piechart:
+                sType = "2";
+                initView(Mstartdate,Menddate);
+                break;
+            //支出按钮
+            case R.id.outpay:
+                sType = "0";
+                initView(Mstartdate,Menddate);
+                break;
+            //收入按钮
+            case R.id.income:
+                sType = "1";
+                initView(Mstartdate,Menddate);
+                break;
             //显示百分比
             case R.id.btn_show_percentage:
                 for (IDataSet<?> set : mPieChart.getData().getDataSets())
