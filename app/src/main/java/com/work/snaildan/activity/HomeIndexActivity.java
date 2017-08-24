@@ -5,11 +5,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Matrix;
 import android.graphics.Paint;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffXfermode;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -24,6 +20,7 @@ public class HomeIndexActivity extends Activity {
     private ImageView main_account;
     private ImageView main_report;
     private ImageView main_more;
+    private ImageView main_budget;
     private TextView index_total_in;
     private TextView index_total_out;
     private TextView index_date;
@@ -49,13 +46,21 @@ public class HomeIndexActivity extends Activity {
                 startActivity(intent);
             }
         });
-        main_account = (ImageView)findViewById(R.id.main_account);
-        main_account.setOnClickListener(new View.OnClickListener(){
+        main_budget = (ImageView) findViewById(R.id.main_budget);
+        main_budget.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(HomeIndexActivity.this,AccountActivity.class);
+                Intent intent = new Intent(HomeIndexActivity.this, BudgetActivity.class);
                 //Intent intent = new Intent(Intent.ACTION_VIEW);
                 //intent.setData(Uri.parse("https://www.baidu.com"));
+                startActivity(intent);
+            }
+        });
+        main_more = (ImageView) findViewById(R.id.main_more);
+        main_more.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(HomeIndexActivity.this, MoreActivity.class);
                 startActivity(intent);
             }
         });
