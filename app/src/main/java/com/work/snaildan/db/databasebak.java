@@ -16,7 +16,7 @@ import java.io.IOException;
 
 public class DatabaseBak {
 
-    private String mDestXmlFilename = "/sdcard/export.xml";
+    private String mDestXmlFilename = "/sdcard/exportfjfjfj.xml";
     private SQLiteDatabase mDb;
     private Exporter mExporter;
     public DatabaseBak(SQLiteDatabase db, String fileDir,String destXml) {
