@@ -67,5 +67,22 @@
             android:layout_below="@id/more_line3"
             android:src="@drawable/more_about"
             android:clickable="true"/>
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/more_line4"
+            android:layout_below="@id/more_recovery"
+            android:background="@drawable/line"/>
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:id="@+id/more_backup_xml"
+            android:layout_below="@id/more_line4"
+            android:src="@drawable/more_backup"
+            android:clickable="true"/>
+
     </RelativeLayout>
 </RelativeLayout>

@@ -14,13 +14,15 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.work.snaildan.db.DatabaseBak;
+import com.work.snaildan.db.DataBackupRecover;
+import com.work.snaildan.db.DatabaseBakXml;
 
 import java.io.File;
 
 public class MoreActivity extends Activity implements View.OnClickListener{
     private ImageView more_sortmanager;
     private ImageView more_backup;
+    private ImageView more_backup_xml;
     private ImageView more_recovery;
     private ImageView more_about;
     private TextView top_title;
@@ -61,17 +63,20 @@ public class MoreActivity extends Activity implements View.OnClickListener{
         more_backup.setOnClickListener(this);
         more_recovery.setOnClickListener(this);
         more_about.setOnClickListener(this);
+        //备份为xml功能实现，从xml恢复未实现
+        more_backup_xml = (ImageView) findViewById(R.id.more_backup_xml);
+        more_backup_xml.setOnClickListener(this);
     }
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.more_backup:
+            case R.id.more_backup_xml:
                 File DirName = getFilesDir();
                 SQLiteDatabase mDb = openOrCreateDatabase("bookmarks_db.db", Context.MODE_PRIVATE, null);
-                DatabaseBak dbBak = new DatabaseBak(mDb,DirName.getAbsolutePath(),"database.xml");
+                DatabaseBakXml dbBak = new DatabaseBakXml(mDb, DirName.getAbsolutePath(), "database.xml");
                 dbBak.exportData();
 
-                mHandler  =new Handler(){
+                mHandler = new Handler() {
                     @Override
                     public void handleMessage(Message msg) {
                         super.handleMessage(msg);
@@ -123,8 +128,13 @@ public class MoreActivity extends Activity implements View.OnClickListener{
                     }
                 }.start();
                 break;
+            case R.id.more_backup:
+                //Integer re = new DataBackupRecover(this).execute("backupDatabase").get();
+                //Toast.makeText(MoreActivity.this,"操作完成"+re,Toast.LENGTH_SHORT).show();
+                new DataBackupRecover(this).execute("backupDatabase");
+                break;
             case R.id.more_recovery:
-                Toast.makeText(MoreActivity.this,"还原成功",Toast.LENGTH_SHORT).show();
+                new DataBackupRecover(this).execute("restoreDatabase");
                 break;
             case R.id.more_about:
                 Intent intent = new Intent(MoreActivity.this,AboutActivity.class);

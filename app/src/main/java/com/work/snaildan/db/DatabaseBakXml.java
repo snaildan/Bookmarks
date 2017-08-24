@@ -14,12 +14,13 @@ import java.io.IOException;
  * Created by snaildan on 2017/8/23.
  */
 
-public class DatabaseBak {
+public class DatabaseBakXml {
 
     private String mDestXmlFilename = "/sdcard/export.xml";
     private SQLiteDatabase mDb;
     private Exporter mExporter;
-    public DatabaseBak(SQLiteDatabase db, String fileDir,String destXml) {
+
+    public DatabaseBakXml(SQLiteDatabase db, String fileDir, String destXml) {
         mDb = db;
         mDestXmlFilename = destXml;
         Log.i("------保存的文件路径：",fileDir+"/"+destXml);
