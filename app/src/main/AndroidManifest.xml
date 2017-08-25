@@ -28,7 +28,8 @@
         <activity android:name=".AboutActivity"/>
         <activity android:name=".SortManageActivity"/>
         <activity android:name=".SortAddDialog"/>
-        <activity android:name=".BudgetActivity">
+        <activity android:name=".BudgetActivity"/>
+        <activity android:name=".BudgetAddDialog">
         </activity>
     </application>
 

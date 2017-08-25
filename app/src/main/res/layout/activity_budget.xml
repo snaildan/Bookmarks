@@ -3,7 +3,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@drawable/main_bg">
-
     <include
         android:id="@+id/re_top"
         android:layout_width="fill_parent"
@@ -11,13 +10,11 @@
         android:layout_marginBottom="5dp"
         layout="@layout/public_top_layout">
     </include>
-
     <LinearLayout
         android:id="@+id/budget_set_middle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/re_top">
-
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -25,15 +22,13 @@
             android:src="@drawable/budget_set_selector"
             android:layout_weight="1"
             android:clickable="true"/>
-
         <RelativeLayout
             android:layout_width="100dp"
             android:layout_marginRight="25dp"
             android:layout_height="match_parent"
-            android:id="@+id/budget_set_buttom1"
+            android:id="@+id/budget_set_bg"
             android:layout_weight="1"
             android:background="@drawable/budget_open_warning">
-
             <CheckBox
                 android:layout_width="50dp"
                 android:layout_height="wrap_content"
@@ -41,29 +36,28 @@
                 android:layout_marginTop="7dp"
                 android:scaleX="1.5"
                 android:scaleY="1.5"
-                android:id="@+id/budget_open"
-                />
-
+                android:id="@+id/budget_open"/>
             <TextView
                 android:layout_width="150dp"
                 android:layout_height="wrap_content"
                 android:text="开启预警"
                 android:layout_marginLeft="60dp"
                 android:layout_marginTop="10dp"
-                android:textSize="18sp"
-                />
+                android:textSize="18sp"/>
         </RelativeLayout>
-
     </LinearLayout>
-
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/budget_set_buttom"
         android:layout_below="@id/budget_set_middle"
-        android:background="@drawable/flow_list_bg"
         android:layout_margin="5dp">
 
-
+        <ListView
+            android:id="@+id/list_budget"
+            android:layout_marginTop="2dp"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:background="@drawable/flow_list_bg"/>
     </RelativeLayout>
 </RelativeLayout>
