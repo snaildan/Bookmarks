@@ -56,11 +56,11 @@ public class HomeIndexActivity extends Activity {
                 startActivity(intent);
             }
         });
-        main_more = (ImageView) findViewById(R.id.main_more);
-        main_more.setOnClickListener(new View.OnClickListener() {
+        main_account = (ImageView) findViewById(R.id.main_account);
+        main_account.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(HomeIndexActivity.this, MoreActivity.class);
+                Intent intent = new Intent(HomeIndexActivity.this, AccountActivity.class);
                 startActivity(intent);
             }
         });
