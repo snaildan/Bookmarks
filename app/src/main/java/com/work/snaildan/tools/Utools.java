@@ -8,8 +8,6 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-import static android.R.attr.format;
-
 /**
  * Created by snaildan on 2017/7/16.
  */
@@ -60,9 +58,10 @@ public class Utools {
         return last;
     }
     //时间戳转日期字符串
-    public static String stampToDate(long dTime){
+    //FormatStr = "yyyy年-MM月-dd日" or "yyyy-MM" ......
+    public static String stampToDate(long dTime, String FormatStr) {
         String res;
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(FormatStr);
         Date date = new Date(dTime);
         res = simpleDateFormat.format(date);
         return res;

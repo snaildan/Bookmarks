@@ -12,8 +12,10 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.work.snaildan.db.DbManager;
+import com.work.snaildan.dbclass.TableBudget;
 import com.work.snaildan.tools.Utools;
 
 import java.util.ArrayList;
@@ -32,6 +34,13 @@ public class BudgetAddDialog extends Dialog {
     private List<CheckBox> checkBoxList = new ArrayList<CheckBox>();
 
     public Utools utools;
+
+    public float BudgetMoney;
+    public float Level1;
+    public float Level2;
+    public float Level3;
+    public int WarnFlag = 0;
+    public int BudgetDate;
 
     //默认皮肤theme不设定即可自行设置
     public BudgetAddDialog(Activity context, int theme) {
@@ -79,18 +88,81 @@ public class BudgetAddDialog extends Dialog {
         btn_save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                String editStr = budget_editText.getText().toString();
+                if (editStr.equals("")) {
+                    Toast.makeText(context, "请输入预算金额！", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (!isNumber(editStr)) {
+                    Toast.makeText(context, "请输入正确的金额！", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                BudgetMoney = Integer.parseInt(editStr);
                 if (budget_open5.isChecked() == true) {
-                    Log.i("----", "----budget_open5");
+                    Level1 = BudgetMoney / 2;
+                    WarnFlag = 1;
+                } else {
+                    Level1 = 0f;
                 }
                 if (budget_open9.isChecked() == true) {
-                    Log.i("----", "----budget_open9");
+                    Level2 = BudgetMoney * 0.9f;
+                    WarnFlag = 1;
+                } else {
+                    Level2 = 0f;
                 }
                 if (budget_open100.isChecked() == true) {
-                    Log.i("----", "----budget_open100");
+                    Level3 = BudgetMoney;
+                    WarnFlag = 1;
+                } else {
+                    Level3 = 0f;
                 }
-
-
+                String dateStr = utools.getTimestamp("yyyy-MM-dd");
+                long BudgetDateLong = utools.StringToU(dateStr, "yyyy-MM");
+                Log.i("-----", "d----" + dateStr + "---" + BudgetDateLong);
+                //如果已有就更新
+                boolean inflag = dbManage.queryBudget(BudgetDateLong);
+                if (!inflag) {
+                    TableBudget tablebudget = new TableBudget(BudgetMoney, Level1, Level2, Level3, WarnFlag, BudgetDateLong);
+                    dbManage.add(tablebudget);
+                } else {
+                    dbManage.updateBudget(BudgetMoney, Level1, Level2, Level3, WarnFlag, BudgetDateLong);
+                }
+                //dbManage.sqlQuery("table_budget");
+                dbManage.closeDB();
             }
         });
+    }
+
+    /**
+     * 判断字符串是否是数字
+     */
+    public static boolean isNumber(String value) {
+        return isInteger(value) || isDouble(value);
+    }
+
+    /**
+     * 判断字符串是否是整数
+     */
+    public static boolean isInteger(String value) {
+        try {
+            Integer.parseInt(value);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
+
+    /**
+     * 判断字符串是否是浮点数
+     */
+    public static boolean isDouble(String value) {
+        try {
+            Double.parseDouble(value);
+            if (value.contains("."))
+                return true;
+            return false;
+        } catch (NumberFormatException e) {
+            return false;
+        }
     }
 }

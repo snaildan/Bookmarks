@@ -8,6 +8,7 @@ import android.util.Log;
 
 import com.work.snaildan.dbclass.TableAccount;
 import com.work.snaildan.dbclass.TableSort;
+import com.work.snaildan.dbclass.TableBudget;
 import com.work.snaildan.tools.Utools;
 
 import java.util.ArrayList;
@@ -27,6 +28,8 @@ public class DbManager{
         dbHelper = new DbHelper(context);
         db = dbHelper.getWritableDatabase();
     }
+
+    //新增
     public <T> boolean add(T t){
         //事务开始
         db.beginTransaction();
@@ -56,15 +59,53 @@ public class DbManager{
                 Log.i("db-add----","SortCode="+((TableAccount) t).getSortCode()+" Type="+((TableAccount) t).getType()+" AccMoney="+((TableAccount) t).getAccMoney()+" Remark="+((TableAccount) t).getRemark()+" NoteDate="+((TableAccount) t).getNoteDate());
                 db.setTransactionSuccessful();
                 return true;
-           // }else if(t instanceof table_budget){
-
-                //return true;
+            } else if (t instanceof TableBudget) {
+                ContentValues cv = new ContentValues();
+                cv.put("BudgetMoney", ((TableBudget) t).getBudgetMoney());
+                cv.put("Level1", ((TableBudget) t).getLevel1());
+                cv.put("Level2", ((TableBudget) t).getLevel2());
+                cv.put("Level3", ((TableBudget) t).getLevel3());
+                cv.put("WarnFlag", ((TableBudget) t).getWarnFlag());
+                cv.put("BudgetDate", ((TableBudget) t).getBudgetDate());
+                db.insert(this.table_budget, null, cv);
+                Log.i("db-add----", "BudgetDate=" + ((TableBudget) t).getBudgetDate() + " WarnFlag=" + ((TableBudget) t).getWarnFlag() + " BudgetMoney=" + ((TableBudget) t).getBudgetMoney() + " Level3=" + ((TableBudget) t).getLevel3() + " Level2=" + ((TableBudget) t).getLevel2() + " Level1=" + ((TableBudget) t).getLevel1());
+                db.setTransactionSuccessful();
+                return true;
             }else {
                 return false;
             }
         }finally {
             db.endTransaction();
         }
+    }
+
+    //查询预算
+    public boolean queryBudget(long BudgetDate) {
+        String dTime = BudgetDate + "";
+        long timeDate = 0;
+        Log.i("-----", "-----dTime " + dTime);
+        Cursor c = db.rawQuery("select BudgetDate from table_budget where BudgetDate = ? ", new String[]{dTime});
+        while (c.moveToNext()) {
+            timeDate = c.getLong(c.getColumnIndex("BudgetDate"));
+        }
+        Log.i("-----", "-----BudgetDate " + timeDate + "------dTime " + dTime);
+        if (timeDate > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    //更新预算
+    public void updateBudget(float BudgetMoney, float Level1, float Level2, float Level3, int WarnFlag, long BudgetDate) {
+        String dTime = BudgetDate + "";
+        ContentValues cv = new ContentValues();
+        cv.put("BudgetMoney", BudgetMoney);
+        cv.put("Level1", Level1);
+        cv.put("Level2", Level2);
+        cv.put("Level3", Level3);
+        cv.put("WarnFlag", WarnFlag);
+        db.update(this.table_budget, cv, "BudgetDate = ?", new String[]{dTime});
     }
     //遍历所有表中数据
     public ArrayList sqlQuery(String tableName){
@@ -101,7 +142,22 @@ public class DbManager{
             c_.close();
             return tableSorts;
         }else if(tableName.equals(table_budget)){
-            return null;
+            ArrayList<TableBudget> tableBudgets = new ArrayList<>();
+            Cursor c_ = db.rawQuery("select * from table_budget where _id >= ?", new String[]{"0"});
+            while (c_.moveToNext()) {
+                TableBudget tablebudget = new TableBudget();
+                tablebudget._id = c_.getInt(c_.getColumnIndex("_id"));
+                tablebudget.BudgetMoney = c_.getFloat(c_.getColumnIndex("BudgetMoney"));
+                tablebudget.Level1 = c_.getFloat(c_.getColumnIndex("Level1"));
+                tablebudget.Level2 = c_.getFloat(c_.getColumnIndex("Level2"));
+                tablebudget.Level3 = c_.getFloat(c_.getColumnIndex("Level3"));
+                tablebudget.WarnFlag = c_.getInt(c_.getColumnIndex("WarnFlag"));
+                tablebudget.BudgetDate = c_.getLong(c_.getColumnIndex("BudgetDate"));
+                Log.i("db-query----", "_id=" + tablebudget._id + " BudgetMoney=" + tablebudget.BudgetMoney + " Level1=" + tablebudget.Level1 + " Level2=" + tablebudget.Level2 + " Level3=" + tablebudget.Level3 + " WarnFlag=" + tablebudget.WarnFlag + " BudgetDate=" + tablebudget.BudgetDate);
+                tableBudgets.add(tablebudget);
+            }
+            c_.close();
+            return tableBudgets;
         }else{
             return null;
         }

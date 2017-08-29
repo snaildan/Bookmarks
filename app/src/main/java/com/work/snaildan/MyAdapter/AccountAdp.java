@@ -1,10 +1,8 @@
 package com.work.snaildan.MyAdapter;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewDebug;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
@@ -12,7 +10,6 @@ import android.widget.TextView;
 
 import com.work.snaildan.activity.R;
 import com.work.snaildan.dbclass.TableAccount;
-import com.work.snaildan.dbclass.TableSort;
 import com.work.snaildan.tools.Utools;
 
 import java.util.ArrayList;
@@ -92,7 +89,7 @@ public class AccountAdp extends BaseAdapter {
             listSortView.acc_icon.setBackgroundResource(R.drawable.flow_icon_outpay);
         }
         Utools utools = new Utools();
-        String dTime = utools.stampToDate(bean.getNoteDate());
+        String dTime = utools.stampToDate(bean.getNoteDate(), "yyyy-MM-dd");
         listSortView.acc_noteDate.setText(dTime);
         listSortView.acc_type.setText(acc_type);
         listSortView.acc_code.setText(acc_code);
