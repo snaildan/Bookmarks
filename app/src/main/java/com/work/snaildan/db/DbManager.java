@@ -100,6 +100,7 @@ public class DbManager{
     public float queryBudgetVal(long BudgetDate) {
         String dTime = BudgetDate + "";
         float budgetMoney = 0;
+        ArrayList<TableAccount> tableAccounts = new ArrayList<>();
         //Log.i("-----", "-----dTime " + dTime);
         Cursor c = db.rawQuery("select BudgetMoney from table_budget where BudgetDate = ? limit 1", new String[]{dTime});
         while (c.moveToNext()) {
@@ -111,6 +112,27 @@ public class DbManager{
         } else {
             return 0;
         }
+    }
+
+    //按日期查询预算信息
+    public ArrayList queryBudgetInfo(long BudgetDate) {
+        String dTime = BudgetDate + "";
+        ArrayList<TableBudget> tableBudgets = new ArrayList<>();
+        Cursor c_ = db.rawQuery("select * from table_budget where BudgetDate = ? limit 1", new String[]{dTime});
+        while (c_.moveToNext()) {
+            TableBudget tablebudget = new TableBudget();
+            tablebudget._id = c_.getInt(c_.getColumnIndex("_id"));
+            tablebudget.BudgetMoney = c_.getFloat(c_.getColumnIndex("BudgetMoney"));
+            tablebudget.Level1 = c_.getFloat(c_.getColumnIndex("Level1"));
+            tablebudget.Level2 = c_.getFloat(c_.getColumnIndex("Level2"));
+            tablebudget.Level3 = c_.getFloat(c_.getColumnIndex("Level3"));
+            tablebudget.WarnFlag = c_.getInt(c_.getColumnIndex("WarnFlag"));
+            tablebudget.BudgetDate = c_.getLong(c_.getColumnIndex("BudgetDate"));
+            Log.i("db-query-one---", "_id=" + tablebudget._id + " BudgetMoney=" + tablebudget.BudgetMoney + " Level1=" + tablebudget.Level1 + " Level2=" + tablebudget.Level2 + " Level3=" + tablebudget.Level3 + " WarnFlag=" + tablebudget.WarnFlag + " BudgetDate=" + tablebudget.BudgetDate);
+            tableBudgets.add(tablebudget);
+        }
+        c_.close();
+        return tableBudgets;
     }
 
     //更新预算
@@ -170,7 +192,7 @@ public class DbManager{
                 tablebudget.Level3 = c_.getFloat(c_.getColumnIndex("Level3"));
                 tablebudget.WarnFlag = c_.getInt(c_.getColumnIndex("WarnFlag"));
                 tablebudget.BudgetDate = c_.getLong(c_.getColumnIndex("BudgetDate"));
-                Log.i("db-query----", "_id=" + tablebudget._id + " BudgetMoney=" + tablebudget.BudgetMoney + " Level1=" + tablebudget.Level1 + " Level2=" + tablebudget.Level2 + " Level3=" + tablebudget.Level3 + " WarnFlag=" + tablebudget.WarnFlag + " BudgetDate=" + tablebudget.BudgetDate);
+                //Log.i("db-query----", "_id=" + tablebudget._id + " BudgetMoney=" + tablebudget.BudgetMoney + " Level1=" + tablebudget.Level1 + " Level2=" + tablebudget.Level2 + " Level3=" + tablebudget.Level3 + " WarnFlag=" + tablebudget.WarnFlag + " BudgetDate=" + tablebudget.BudgetDate);
                 tableBudgets.add(tablebudget);
             }
             c_.close();

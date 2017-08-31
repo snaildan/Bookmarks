@@ -18,6 +18,8 @@ import com.work.snaildan.db.DbManager;
 import com.work.snaildan.dbclass.TableBudget;
 import com.work.snaildan.tools.Utools;
 
+import java.util.ArrayList;
+
 public class BudgetAddDialog extends Dialog {
     final Activity context;
     private DbManager dbManage;
@@ -62,6 +64,28 @@ public class BudgetAddDialog extends Dialog {
         String dateStr = utools.getTimestamp("yyyy-MM");
         budget_text.setText(dateStr + "预算：");
 
+        //查出预算信息
+        String dateStr_ = utools.getTimestamp("yyyy-MM-dd");
+        long BudgetDateLong = utools.StringToU(dateStr_, "yyyy-MM");
+        ArrayList<TableBudget> tableBudgetOne = dbManage.queryBudgetInfo(BudgetDateLong);
+        if (tableBudgetOne.size() != 0) {
+            Float value = tableBudgetOne.get(0).getBudgetMoney();
+            String vStr = value + "";
+            budget_editText.setText(vStr);
+            Float level1 = tableBudgetOne.get(0).getLevel1();
+            if (level1 > 0) {
+                budget_open5.setChecked(true);
+            }
+            Float level2 = tableBudgetOne.get(0).getLevel2();
+            if (level2 > 0) {
+                budget_open9.setChecked(true);
+            }
+            Float level3 = tableBudgetOne.get(0).getLevel3();
+            if (level3 > 0) {
+                budget_open100.setChecked(true);
+            }
+        }
+
         Window dialogWindow = this.getWindow();
         WindowManager m = context.getWindowManager();
         //获取屏幕宽、高用
@@ -96,7 +120,7 @@ public class BudgetAddDialog extends Dialog {
                     Toast.makeText(context, "请输入正确的金额！", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                BudgetMoney = Integer.parseInt(editStr);
+                BudgetMoney = Float.parseFloat(editStr);
                 if (BudgetMoney < 100) {
                     Toast.makeText(context, "请输入大于100的金额！", Toast.LENGTH_SHORT).show();
                     return;
