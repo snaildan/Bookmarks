@@ -7,8 +7,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 import com.work.snaildan.dbclass.TableAccount;
-import com.work.snaildan.dbclass.TableSort;
 import com.work.snaildan.dbclass.TableBudget;
+import com.work.snaildan.dbclass.TableSort;
 import com.work.snaildan.tools.Utools;
 
 import java.util.ArrayList;
@@ -45,7 +45,7 @@ public class DbManager{
                 cv.put("State",((TableSort) t).getState());
                 cv.put("Icon",((TableSort) t).getIcon());
                 db.insert(this.table_sort,null,cv);
-                Log.i("db-add----","SortCode= "+((TableSort) t).getSortCode()+"SortName= "+((TableSort) t).getSortName());
+                //Log.i("db-add----","SortCode= "+((TableSort) t).getSortCode()+"SortName= "+((TableSort) t).getSortName());
                 db.setTransactionSuccessful();//设置事务
                 return true;
             }else if(t instanceof TableAccount){
@@ -56,7 +56,7 @@ public class DbManager{
                 cv.put("NoteDate",((TableAccount) t).getNoteDate());
                 cv.put("Type",((TableAccount) t).getType());
                 db.insert(this.table_account,null,cv);
-                Log.i("db-add----","SortCode="+((TableAccount) t).getSortCode()+" Type="+((TableAccount) t).getType()+" AccMoney="+((TableAccount) t).getAccMoney()+" Remark="+((TableAccount) t).getRemark()+" NoteDate="+((TableAccount) t).getNoteDate());
+                //Log.i("db-add----","SortCode="+((TableAccount) t).getSortCode()+" Type="+((TableAccount) t).getType()+" AccMoney="+((TableAccount) t).getAccMoney()+" Remark="+((TableAccount) t).getRemark()+" NoteDate="+((TableAccount) t).getNoteDate());
                 db.setTransactionSuccessful();
                 return true;
             } else if (t instanceof TableBudget) {
@@ -68,7 +68,7 @@ public class DbManager{
                 cv.put("WarnFlag", ((TableBudget) t).getWarnFlag());
                 cv.put("BudgetDate", ((TableBudget) t).getBudgetDate());
                 db.insert(this.table_budget, null, cv);
-                Log.i("db-add----", "BudgetDate=" + ((TableBudget) t).getBudgetDate() + " WarnFlag=" + ((TableBudget) t).getWarnFlag() + " BudgetMoney=" + ((TableBudget) t).getBudgetMoney() + " Level3=" + ((TableBudget) t).getLevel3() + " Level2=" + ((TableBudget) t).getLevel2() + " Level1=" + ((TableBudget) t).getLevel1());
+                //Log.i("db-add----", "BudgetDate=" + ((TableBudget) t).getBudgetDate() + " WarnFlag=" + ((TableBudget) t).getWarnFlag() + " BudgetMoney=" + ((TableBudget) t).getBudgetMoney() + " Level3=" + ((TableBudget) t).getLevel3() + " Level2=" + ((TableBudget) t).getLevel2() + " Level1=" + ((TableBudget) t).getLevel1());
                 db.setTransactionSuccessful();
                 return true;
             }else {
@@ -83,16 +83,33 @@ public class DbManager{
     public boolean queryBudget(long BudgetDate) {
         String dTime = BudgetDate + "";
         long timeDate = 0;
-        Log.i("-----", "-----dTime " + dTime);
-        Cursor c = db.rawQuery("select BudgetDate from table_budget where BudgetDate = ? ", new String[]{dTime});
+        //Log.i("-----", "-----dTime " + dTime);
+        Cursor c = db.rawQuery("select BudgetDate from table_budget where BudgetDate = ? limit 1", new String[]{dTime});
         while (c.moveToNext()) {
             timeDate = c.getLong(c.getColumnIndex("BudgetDate"));
         }
-        Log.i("-----", "-----BudgetDate " + timeDate + "------dTime " + dTime);
+        //Log.i("-----", "-----BudgetDate " + timeDate + "------dTime " + dTime);
         if (timeDate > 0) {
             return true;
         } else {
             return false;
+        }
+    }
+
+    //按日期查询预算值
+    public float queryBudgetVal(long BudgetDate) {
+        String dTime = BudgetDate + "";
+        float budgetMoney = 0;
+        //Log.i("-----", "-----dTime " + dTime);
+        Cursor c = db.rawQuery("select BudgetMoney from table_budget where BudgetDate = ? limit 1", new String[]{dTime});
+        while (c.moveToNext()) {
+            budgetMoney = c.getFloat(c.getColumnIndex("BudgetMoney"));
+        }
+        //Log.i("-----", "-----budgetMoney " + budgetMoney + "------dTime " + dTime);
+        if (budgetMoney > 0) {
+            return budgetMoney;
+        } else {
+            return 0;
         }
     }
 
@@ -120,7 +137,7 @@ public class DbManager{
                 tableAccount.Remark = c.getString(c.getColumnIndex("Remark"));
                 tableAccount.Type = c.getString(c.getColumnIndex("Type"));
                 tableAccount.NoteDate = c.getLong(c.getColumnIndex("NoteDate"));
-                Log.i("db-query----","_id="+tableAccount._id+" SortCode="+tableAccount.SortCode+" Type="+tableAccount.Type+" AccMoney="+tableAccount.AccMoney+" NoteDate="+tableAccount.NoteDate+" Remark="+tableAccount.Remark);
+                //Log.i("db-query----","_id="+tableAccount._id+" SortCode="+tableAccount.SortCode+" Type="+tableAccount.Type+" AccMoney="+tableAccount.AccMoney+" NoteDate="+tableAccount.NoteDate+" Remark="+tableAccount.Remark);
                 tableAccounts.add(tableAccount);
             }
             c.close();
@@ -136,14 +153,14 @@ public class DbManager{
                 tableSort.Type = c_.getString(c_.getColumnIndex("Type"));
                 tableSort.State = c_.getInt(c_.getColumnIndex("State"));
                 tableSort.Icon = c_.getString(c_.getColumnIndex("Icon"));
-                Log.i("db-query----", "_id=" + tableSort._id  + " SortName=" + tableSort.SortName + " Type=" + tableSort.Type + " SortCode=" + tableSort.SortCode+ " Icon=" + tableSort.Icon);
+                //Log.i("db-query----", "_id=" + tableSort._id  + " SortName=" + tableSort.SortName + " Type=" + tableSort.Type + " SortCode=" + tableSort.SortCode+ " Icon=" + tableSort.Icon);
                 tableSorts.add(tableSort);
             }
             c_.close();
             return tableSorts;
         }else if(tableName.equals(table_budget)){
             ArrayList<TableBudget> tableBudgets = new ArrayList<>();
-            Cursor c_ = db.rawQuery("select * from table_budget where _id >= ?", new String[]{"0"});
+            Cursor c_ = db.rawQuery("select * from table_budget where _id >= ? order by BudgetDate desc", new String[]{"0"});
             while (c_.moveToNext()) {
                 TableBudget tablebudget = new TableBudget();
                 tablebudget._id = c_.getInt(c_.getColumnIndex("_id"));
@@ -174,7 +191,7 @@ public class DbManager{
             tableSort.Type = c_.getString(c_.getColumnIndex("Type"));
             tableSort.State = c_.getInt(c_.getColumnIndex("State"));
             tableSort.Icon = c_.getString(c_.getColumnIndex("Icon"));
-            Log.i("db-query----", "_id=" + tableSort._id  + " SortName=" + tableSort.SortName + " Type=" + tableSort.Type + " SortCode=" + tableSort.SortCode+ " Icon=" + tableSort.Icon);
+            //Log.i("db-query----", "_id=" + tableSort._id  + " SortName=" + tableSort.SortName + " Type=" + tableSort.Type + " SortCode=" + tableSort.SortCode+ " Icon=" + tableSort.Icon);
             tableSorts.add(tableSort);
         }
         c_.close();
@@ -187,16 +204,16 @@ public class DbManager{
         String monthLastDay = utools.getMonthLastDay();
         long firstLong = utools.StringToU(monthFirstDay,"yyyy-MM-dd");
         long lastLong = utools.StringToU(monthLastDay,"yyyy-MM-dd");
-        Log.i("DB-monthTotal----","当前月第一天的时间戳："+firstLong);
-        Log.i("DB-monthTotal----","当前月最后一天的时间戳："+lastLong);
+        //Log.i("DB-monthTotal----","当前月第一天的时间戳："+firstLong);
+        //Log.i("DB-monthTotal----","当前月最后一天的时间戳："+lastLong);
         //转字符串
         String firstString = firstLong + "";
         String lastString = lastLong + "";
-        Cursor c = db.rawQuery("select sum(AccMoney) as totalin from table_account where Type = ? and NoteDate > ? and NoteDate < ?", new String[]{Type,firstString,lastString});
+        Cursor c = db.rawQuery("select sum(AccMoney) as totalin from table_account where Type = ? and NoteDate > ? and NoteDate <= ?", new String[]{Type, firstString, lastString});
         while (c.moveToNext()) {
             total = c.getString(c.getColumnIndex("totalin"));
         }
-        Log.i("table_account----","每月支出、收入total："+total);
+        //Log.i("table_account----","每月支出、收入total："+total);
         c.close();
         if(total == null){
             total = "0.0";
@@ -213,7 +230,7 @@ public class DbManager{
         while (c.moveToNext()) {
             total = c.getString(c.getColumnIndex("totalin"));
         }
-        Log.i("table_account----","每日支出、收入total："+total);
+        //Log.i("table_account----","每日支出、收入total："+total);
         if(total == null){
             total = "0.0";
         }
@@ -237,8 +254,8 @@ public class DbManager{
             tableAccount.AccMoney = c.getFloat(c.getColumnIndex("totalin"));
             tableAccount.SortCode = c.getString(c.getColumnIndex("SortCode"));
 
-            Log.i("table_account----","total："+tableAccount.AccMoney);
-            Log.i("table_account----","类型："+tableAccount.SortCode);
+            //Log.i("table_account----","total："+tableAccount.AccMoney);
+            //Log.i("table_account----","类型："+tableAccount.SortCode);
             tableAccounts.add(tableAccount);
         }
         c.close();
@@ -265,17 +282,40 @@ public class DbManager{
         }
         return total;
     }
+
+    //指定月的支出总额
+    public String monthDTotal(Long date) {
+        String total = "";
+        String monthFirstDay = utools.getMonthsFirstDay(date);
+        String monthLastDay = utools.getMonthsLastDay(date);
+        long firstLong = utools.StringToU(monthFirstDay, "yyyy-MM-dd");
+        long lastLong = utools.StringToU(monthLastDay, "yyyy-MM-dd");
+//        Log.i("DB-monthTotal----","指定月第一天的时间戳："+firstLong);
+//        Log.i("DB-monthTotal----","指定月最后一天的时间戳："+lastLong);
+        //转字符串
+        String firstString = firstLong + "";
+        String lastString = lastLong + "";
+        Cursor c = db.rawQuery("select sum(AccMoney) as totalin from table_account where Type = 0 and NoteDate > ? and NoteDate <= ?", new String[]{firstString, lastString});
+        while (c.moveToNext()) {
+            total = c.getString(c.getColumnIndex("totalin"));
+        }
+        c.close();
+        if (total == null) {
+            total = "0";
+        }
+        return total;
+    }
     //删除数据
     public void  delById(String tableName,String[] id){
         if(tableName.equals(table_account)) {
             db.delete(tableName,"_id=?",id);
-            Log.i("del----","删除了id");
+            //Log.i("del----","删除了id");
         }else if(tableName.equals(table_sort)) {
             db.delete(tableName,"_id=?",id);
-            Log.i("del----","删除了id");
+            //Log.i("del----","删除了id");
         }else if(tableName.equals(table_budget)){
             db.delete(tableName,"_id=?",id);
-            Log.i("del----","删除了id");
+            //Log.i("del----","删除了id");
         }
     }
 

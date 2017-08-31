@@ -5,7 +5,6 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -21,11 +20,10 @@ import com.work.snaildan.MyAdapter.SpinnerAdapter;
 import com.work.snaildan.db.DbManager;
 import com.work.snaildan.dbclass.TableAccount;
 import com.work.snaildan.dbclass.TableSort;
+import com.work.snaildan.tools.Utools;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-
-import com.work.snaildan.tools.Utools;
 
 public class AddActivity extends Activity implements View.OnClickListener{
     private ImageView re_top_button;
@@ -122,7 +120,7 @@ public class AddActivity extends Activity implements View.OnClickListener{
         for(int i = 1;i < tableSorts.size()+1; i++){
             sorts_name[i] = tableSorts.get(i-1).getSortName();
             sorts_pic[i] = utools.getResource(this,tableSorts.get(i-1).getIcon());
-            Log.i("------","sorts_pic："+tableSorts.get(i-1).getIcon()+" sorts_picid："+sorts_pic[i-1]);
+            //Log.i("------","sorts_pic："+tableSorts.get(i-1).getIcon()+" sorts_picid："+sorts_pic[i-1]);
         }
         SpinnerAdapter adapter = new SpinnerAdapter(this,sorts_pic,sorts_name);
         spinner_sort.setAdapter(adapter);
@@ -173,7 +171,7 @@ public class AddActivity extends Activity implements View.OnClickListener{
                 LinearLayout ll = (LinearLayout)view;
                 TextView tv = (TextView)ll.findViewWithTag("tagSpinnerView");
                 spinner_type_str = (String)tv.getText();
-                Log.i("spinner_type----","selected===========>"+ spinner_type_str);
+                //Log.i("spinner_type----","selected===========>"+ spinner_type_str);
                 //按类型刷新类别表
                 if(spinner_type_str.equals("支出")){
                     initSortSpinner("0");
@@ -185,11 +183,11 @@ public class AddActivity extends Activity implements View.OnClickListener{
                 LinearLayout ll = (LinearLayout)view;
                 TextView tv = (TextView)ll.findViewWithTag("tagSpinnerView");
                 spinner_sort_str = (String)tv.getText();
-                Log.i("spinner_type----","selected===========>"+ spinner_sort_str);
+                //Log.i("spinner_type----","selected===========>"+ spinner_sort_str);
             }
         }
         public void onNothingSelected(AdapterView<?> arg0) {
-            Log.i("spinner_sort----","selected===========>Nothing");
+            //Log.i("spinner_sort----","selected===========>Nothing");
         }
     }
     //日期控件

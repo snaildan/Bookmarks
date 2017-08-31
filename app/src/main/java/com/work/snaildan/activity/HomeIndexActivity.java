@@ -96,11 +96,19 @@ public class HomeIndexActivity extends Activity {
 
         //数据库取出首页数据
         String total_in_str = "¥"+dbManage.monthTotal("1");
-        String total_out_str = "¥"+dbManage.monthTotal("0");
+        String out_str = dbManage.monthTotal("0");
+        String total_out_str = "¥" + out_str;
         index_total_in.setText(total_in_str);
         index_total_out.setText(total_out_str);
 
-        index_budget.setText("¥0.0");
+        //预算余额
+        String dateStrB = utools.getTimestamp("yyyy-MM-dd");
+        long BudgetDateLong = utools.StringToU(dateStrB, "yyyy-MM");
+        float budgetVal = dbManage.queryBudgetVal(BudgetDateLong);
+        float out_f = Float.parseFloat(out_str);
+        budgetVal = budgetVal - out_f;
+        String total_budget_str = "¥" + budgetVal;
+        index_budget.setText(total_budget_str);
 
         String today_in_str = "¥"+dbManage.todayTotal("1");
         String today_out_str = "¥"+dbManage.todayTotal("0");

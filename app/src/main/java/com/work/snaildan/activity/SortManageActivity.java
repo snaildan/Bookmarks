@@ -4,18 +4,11 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -90,7 +83,7 @@ public class SortManageActivity extends Activity {
                             String tb_del_id_ = Integer.toString(tb_del.get_id());
                             String[] tb_del_id = new String[]{tb_del_id_};
                             dbManage.delById("table_sort",tb_del_id);
-                            Log.i("tb_del------", "onItemLongClick:"+pos+"数据库id："+tb_del.get_id());
+                            //Log.i("tb_del------", "onItemLongClick:"+pos+"数据库id："+tb_del.get_id());
                             tableSorts.remove(pos);
                             sortManageAdp.notifyDataSetChanged();
                             Toast.makeText(SortManageActivity.this,"删除成功！",Toast.LENGTH_SHORT).show();

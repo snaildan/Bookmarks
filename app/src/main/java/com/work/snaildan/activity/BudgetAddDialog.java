@@ -3,7 +3,6 @@ package com.work.snaildan.activity;
 import android.app.Activity;
 import android.app.Dialog;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Display;
 import android.view.View;
 import android.view.Window;
@@ -14,12 +13,10 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.work.snaildan.MyAdapter.BudgetAdp;
 import com.work.snaildan.db.DbManager;
 import com.work.snaildan.dbclass.TableBudget;
 import com.work.snaildan.tools.Utools;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class BudgetAddDialog extends Dialog {
     final Activity context;
@@ -31,7 +28,6 @@ public class BudgetAddDialog extends Dialog {
     private CheckBox budget_open5;
     private CheckBox budget_open9;
     private CheckBox budget_open100;
-    private List<CheckBox> checkBoxList = new ArrayList<CheckBox>();
 
     public Utools utools;
 
@@ -40,7 +36,7 @@ public class BudgetAddDialog extends Dialog {
     public float Level2;
     public float Level3;
     public int WarnFlag = 0;
-    public int BudgetDate;
+    private BudgetAdp budgetAdp;
 
     //默认皮肤theme不设定即可自行设置
     public BudgetAddDialog(Activity context, int theme) {
@@ -49,6 +45,9 @@ public class BudgetAddDialog extends Dialog {
         dbManage = new DbManager(context);
     }
 
+    public void setBAdapter(BudgetAdp budgetAdp) {
+        this.budgetAdp = budgetAdp;
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -93,11 +92,15 @@ public class BudgetAddDialog extends Dialog {
                     Toast.makeText(context, "请输入预算金额！", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                if (!isNumber(editStr)) {
+                if (!utools.isNumber(editStr)) {
                     Toast.makeText(context, "请输入正确的金额！", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 BudgetMoney = Integer.parseInt(editStr);
+                if (BudgetMoney < 100) {
+                    Toast.makeText(context, "请输入大于100的金额！", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 if (budget_open5.isChecked() == true) {
                     Level1 = BudgetMoney / 2;
                     WarnFlag = 1;
@@ -118,51 +121,19 @@ public class BudgetAddDialog extends Dialog {
                 }
                 String dateStr = utools.getTimestamp("yyyy-MM-dd");
                 long BudgetDateLong = utools.StringToU(dateStr, "yyyy-MM");
-                Log.i("-----", "d----" + dateStr + "---" + BudgetDateLong);
                 //如果已有就更新
                 boolean inflag = dbManage.queryBudget(BudgetDateLong);
+                TableBudget tablebudget = new TableBudget(BudgetMoney, Level1, Level2, Level3, WarnFlag, BudgetDateLong);
                 if (!inflag) {
-                    TableBudget tablebudget = new TableBudget(BudgetMoney, Level1, Level2, Level3, WarnFlag, BudgetDateLong);
                     dbManage.add(tablebudget);
                 } else {
                     dbManage.updateBudget(BudgetMoney, Level1, Level2, Level3, WarnFlag, BudgetDateLong);
                 }
-                //dbManage.sqlQuery("table_budget");
                 dbManage.closeDB();
+                //budgetAdp传入并将新项目add到列表中
+                budgetAdp.addList(tablebudget);
+                dismiss();
             }
         });
-    }
-
-    /**
-     * 判断字符串是否是数字
-     */
-    public static boolean isNumber(String value) {
-        return isInteger(value) || isDouble(value);
-    }
-
-    /**
-     * 判断字符串是否是整数
-     */
-    public static boolean isInteger(String value) {
-        try {
-            Integer.parseInt(value);
-            return true;
-        } catch (NumberFormatException e) {
-            return false;
-        }
-    }
-
-    /**
-     * 判断字符串是否是浮点数
-     */
-    public static boolean isDouble(String value) {
-        try {
-            Double.parseDouble(value);
-            if (value.contains("."))
-                return true;
-            return false;
-        } catch (NumberFormatException e) {
-            return false;
-        }
     }
 }

@@ -3,7 +3,6 @@ package com.work.snaildan.activity;
 import android.app.Activity;
 import android.app.Dialog;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Display;
 import android.view.View;
 import android.view.Window;
@@ -83,34 +82,34 @@ public class SortAddDialog extends Dialog {
                         s_sortCode = "101";
                         s_type_s = "0";
                     }
-                    TableSort tableSort = new TableSort(s_sortCode,add_sortName_str,s_type_s,1,"R.drawable.icon_zdy");
-                    dbManage.add(tableSort);
-//                    TableSort tableSort1 = new TableSort(s_sortCode,"工资","1",0,"R.drawable.icon_gz");
-//                    dbManage.add(tableSort1);
-//                    TableSort tableSort2 = new TableSort(s_sortCode,"奖金","1",0,"R.drawable.icon_jj");
-//                    dbManage.add(tableSort2);
-//                    TableSort tableSort3 = new TableSort(s_sortCode,"股票","1",0,"R.drawable.icon_gp");
-//                    dbManage.add(tableSort3);
-//                    TableSort tableSort4 = new TableSort(s_sortCode,"礼物","1",0,"R.drawable.icon_sl");
-//                    dbManage.add(tableSort4);
-//                    TableSort tableSort5 = new TableSort(s_sortCode,"吃饭","0",0,"R.drawable.icon_cf");
-//                    dbManage.add(tableSort5);
-//                    TableSort tableSort6 = new TableSort(s_sortCode,"购物","0",0,"R.drawable.icon_gw");
-//                    dbManage.add(tableSort6);
-//                    TableSort tableSort7 = new TableSort(s_sortCode,"娱乐","0",0,"R.drawable.icon_yule");
-//                    dbManage.add(tableSort7);
-//                    TableSort tableSort8 = new TableSort(s_sortCode,"交通","0",0,"R.drawable.icon_jt");
-//                    dbManage.add(tableSort8);
-//                    TableSort tableSort9 = new TableSort(s_sortCode,"通信","0",0,"R.drawable.icon_tx");
-//                    dbManage.add(tableSort9);
-//                    TableSort tableSort19 = new TableSort(s_sortCode,"医疗","0",0,"R.drawable.icon_yl");
-//                    dbManage.add(tableSort19);
-//                    TableSort tableSort10 = new TableSort(s_sortCode,"捐款","0",0,"R.drawable.icon_jz");
-//                    dbManage.add(tableSort10);
+//                    TableSort tableSort = new TableSort(s_sortCode,add_sortName_str,s_type_s,1,"R.drawable.icon_zdy");
+//                    dbManage.add(tableSort);
+                    TableSort tableSort1 = new TableSort(s_sortCode, "工资", "1", 0, "R.drawable.icon_gz");
+                    dbManage.add(tableSort1);
+                    TableSort tableSort2 = new TableSort(s_sortCode, "奖金", "1", 0, "R.drawable.icon_jj");
+                    dbManage.add(tableSort2);
+                    TableSort tableSort3 = new TableSort(s_sortCode, "股票", "1", 0, "R.drawable.icon_gp");
+                    dbManage.add(tableSort3);
+                    TableSort tableSort4 = new TableSort(s_sortCode, "礼物", "1", 0, "R.drawable.icon_sl");
+                    dbManage.add(tableSort4);
+                    TableSort tableSort5 = new TableSort(s_sortCode, "吃饭", "0", 0, "R.drawable.icon_cf");
+                    dbManage.add(tableSort5);
+                    TableSort tableSort6 = new TableSort(s_sortCode, "购物", "0", 0, "R.drawable.icon_gw");
+                    dbManage.add(tableSort6);
+                    TableSort tableSort7 = new TableSort(s_sortCode, "娱乐", "0", 0, "R.drawable.icon_yule");
+                    dbManage.add(tableSort7);
+                    TableSort tableSort8 = new TableSort(s_sortCode, "交通", "0", 0, "R.drawable.icon_jt");
+                    dbManage.add(tableSort8);
+                    TableSort tableSort9 = new TableSort(s_sortCode, "通信", "0", 0, "R.drawable.icon_tx");
+                    dbManage.add(tableSort9);
+                    TableSort tableSort19 = new TableSort(s_sortCode, "医疗", "0", 0, "R.drawable.icon_yl");
+                    dbManage.add(tableSort19);
+                    TableSort tableSort10 = new TableSort(s_sortCode, "捐款", "0", 0, "R.drawable.icon_jz");
+                    dbManage.add(tableSort10);
                     dbManage.closeDB();
                     Toast.makeText(context,add_sortName_str+"类别保存成功！",Toast.LENGTH_SHORT).show();
                     //sortManageAdp传入并将新项目add
-                    sortManageAdp.addList(tableSort);
+                    //sortManageAdp.addList(tableSort);
                     dismiss();
                 }
             }
@@ -145,11 +144,11 @@ public class SortAddDialog extends Dialog {
                 LinearLayout ll = (LinearLayout)view;
                 TextView tv = (TextView)ll.findViewWithTag("tagSpinnerView");
                 sort_spinner_str = (String)tv.getText();
-                Log.i("Spinner----","selected===========>"+ sort_spinner_str);
+                //Log.i("Spinner----","selected===========>"+ sort_spinner_str);
             }
         }
         public void onNothingSelected(AdapterView<?> arg0) {
-            Log.i("Spinner----","selected===========>Nothing");
+            //Log.i("Spinner----","selected===========>Nothing");
         }
     }
 }
