@@ -1,7 +1,6 @@
 package com.work.snaildan.tools;
 
 import android.content.Context;
-import android.util.Log;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -69,7 +68,7 @@ public class Utools {
             c.setTime(date);
             c.set(Calendar.DAY_OF_MONTH, 1);
             String day_first = formatStr.format(c.getTime());
-            Log.i("----", "---" + day_first);
+            //Log.i("----", "---" + day_first);
             return day_first;
         } catch (ParseException e) {
             e.printStackTrace();

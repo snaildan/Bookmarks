@@ -4,7 +4,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
 
 import com.work.snaildan.dbclass.TableAccount;
 import com.work.snaildan.dbclass.TableBudget;
@@ -128,7 +127,7 @@ public class DbManager{
             tablebudget.Level3 = c_.getFloat(c_.getColumnIndex("Level3"));
             tablebudget.WarnFlag = c_.getInt(c_.getColumnIndex("WarnFlag"));
             tablebudget.BudgetDate = c_.getLong(c_.getColumnIndex("BudgetDate"));
-            Log.i("db-query-one---", "_id=" + tablebudget._id + " BudgetMoney=" + tablebudget.BudgetMoney + " Level1=" + tablebudget.Level1 + " Level2=" + tablebudget.Level2 + " Level3=" + tablebudget.Level3 + " WarnFlag=" + tablebudget.WarnFlag + " BudgetDate=" + tablebudget.BudgetDate);
+            //Log.i("db-query-one---", "_id=" + tablebudget._id + " BudgetMoney=" + tablebudget.BudgetMoney + " Level1=" + tablebudget.Level1 + " Level2=" + tablebudget.Level2 + " Level3=" + tablebudget.Level3 + " WarnFlag=" + tablebudget.WarnFlag + " BudgetDate=" + tablebudget.BudgetDate);
             tableBudgets.add(tablebudget);
         }
         c_.close();
@@ -159,7 +158,7 @@ public class DbManager{
                 tableAccount.Remark = c.getString(c.getColumnIndex("Remark"));
                 tableAccount.Type = c.getString(c.getColumnIndex("Type"));
                 tableAccount.NoteDate = c.getLong(c.getColumnIndex("NoteDate"));
-                Log.i("db-query----", "_id=" + tableAccount._id + " SortCode=" + tableAccount.SortCode + " Type=" + tableAccount.Type + " AccMoney=" + tableAccount.AccMoney + " NoteDate=" + tableAccount.NoteDate + " Remark=" + tableAccount.Remark);
+                //Log.i("db-query----", "_id=" + tableAccount._id + " SortCode=" + tableAccount.SortCode + " Type=" + tableAccount.Type + " AccMoney=" + tableAccount.AccMoney + " NoteDate=" + tableAccount.NoteDate + " Remark=" + tableAccount.Remark);
                 tableAccounts.add(tableAccount);
             }
             c.close();

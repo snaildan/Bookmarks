@@ -1,7 +1,6 @@
 package com.work.snaildan.MyAdapter;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -93,7 +92,7 @@ public class BudgetAdp extends BaseAdapter {
         //赋值
         listSortView.budget_icon.setBackgroundResource(R.drawable.budget_warning_icon);
         String budgetMoney = "预算：￥" + bean.getBudgetMoney() + "";
-        Log.i("snail----", "budgetMoney===== " + budgetMoney);
+        //Log.i("snail----", "budgetMoney===== " + budgetMoney);
         listSortView.budget_value.setText(budgetMoney);
         //时间
         utools = new Utools();

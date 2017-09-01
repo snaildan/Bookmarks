@@ -1,9 +1,12 @@
 package com.work.snaildan.activity;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -18,6 +21,10 @@ public class BudgetActivity extends Activity {
     private TextView top_title;
     private ImageView re_top_button;
     private ImageView budget_set;
+    private CheckBox budget_open;
+    private int budgetstat = 0;
+
+    private SharedPreferences sp;
 
     private BudgetAddDialog AddDialog;
     private DbManager dbManage;
@@ -46,6 +53,17 @@ public class BudgetActivity extends Activity {
         budgetAdp.setList(tableBudget);
         listView.setAdapter(budgetAdp);
 
+        //预警状态
+        budget_open = (CheckBox) findViewById(R.id.budget_open);
+        sp = getSharedPreferences("sp_budget", Context.MODE_PRIVATE);
+        budgetstat = sp.getInt("budgetStat", 0);
+        //默认状态
+        if (budgetstat == 1) {
+            budget_open.setChecked(true);
+        } else {
+            budget_open.setChecked(false);
+        }
+
         //设置预算弹出自定义对话框
         budget_set = (ImageView) findViewById(R.id.budget_set);
         budget_set.setOnClickListener(new View.OnClickListener() {
@@ -56,6 +74,19 @@ public class BudgetActivity extends Activity {
         });
     }
 
+    @Override
+    protected void onStop() {
+        //预警状态保存
+        super.onStop();
+        if (budget_open.isChecked() == true) {
+            budgetstat = 1;
+        } else {
+            budgetstat = 0;
+        }
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putInt("budgetStat", budgetstat);
+        editor.commit();
+    }
     //自定义对话框初始化
     public void showEditDialog(View view, BudgetAdp budgetAdp) {
         AddDialog = new BudgetAddDialog(this, R.style.loading_dialog);
