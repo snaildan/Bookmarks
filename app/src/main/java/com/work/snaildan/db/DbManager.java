@@ -159,7 +159,7 @@ public class DbManager{
                 tableAccount.Remark = c.getString(c.getColumnIndex("Remark"));
                 tableAccount.Type = c.getString(c.getColumnIndex("Type"));
                 tableAccount.NoteDate = c.getLong(c.getColumnIndex("NoteDate"));
-                //Log.i("db-query----","_id="+tableAccount._id+" SortCode="+tableAccount.SortCode+" Type="+tableAccount.Type+" AccMoney="+tableAccount.AccMoney+" NoteDate="+tableAccount.NoteDate+" Remark="+tableAccount.Remark);
+                Log.i("db-query----", "_id=" + tableAccount._id + " SortCode=" + tableAccount.SortCode + " Type=" + tableAccount.Type + " AccMoney=" + tableAccount.AccMoney + " NoteDate=" + tableAccount.NoteDate + " Remark=" + tableAccount.Remark);
                 tableAccounts.add(tableAccount);
             }
             c.close();
@@ -231,7 +231,7 @@ public class DbManager{
         //转字符串
         String firstString = firstLong + "";
         String lastString = lastLong + "";
-        Cursor c = db.rawQuery("select sum(AccMoney) as totalin from table_account where Type = ? and NoteDate > ? and NoteDate <= ?", new String[]{Type, firstString, lastString});
+        Cursor c = db.rawQuery("select sum(AccMoney) as totalin from table_account where Type = ? and NoteDate >= ? and NoteDate <= ?", new String[]{Type, firstString, lastString});
         while (c.moveToNext()) {
             total = c.getString(c.getColumnIndex("totalin"));
         }
@@ -290,6 +290,8 @@ public class DbManager{
         long endDLong = utools.StringToU(endD,"yyyy-MM-dd");
         String startDLongS = startDLong + "";
         String endDLongS = endDLong + "";
+        //Log.i("DB-dayTotal----","开始日期："+startDLong);
+        //Log.i("DB-dayTotal----","结束日期："+endDLong);
         Cursor c;
         if(Type.equals("2")) {
             c = db.rawQuery("select sum(AccMoney) as totalin from table_account where NoteDate >= ? and NoteDate <= ?", new String[]{startDLongS, endDLongS});
@@ -312,12 +314,12 @@ public class DbManager{
         String monthLastDay = utools.getMonthsLastDay(date);
         long firstLong = utools.StringToU(monthFirstDay, "yyyy-MM-dd");
         long lastLong = utools.StringToU(monthLastDay, "yyyy-MM-dd");
-//        Log.i("DB-monthTotal----","指定月第一天的时间戳："+firstLong);
-//        Log.i("DB-monthTotal----","指定月最后一天的时间戳："+lastLong);
+        //Log.i("DB-monthTotal----","指定月第一天的时间戳："+firstLong);
+        //Log.i("DB-monthTotal----","指定月最后一天的时间戳："+lastLong);
         //转字符串
         String firstString = firstLong + "";
         String lastString = lastLong + "";
-        Cursor c = db.rawQuery("select sum(AccMoney) as totalin from table_account where Type = 0 and NoteDate > ? and NoteDate <= ?", new String[]{firstString, lastString});
+        Cursor c = db.rawQuery("select sum(AccMoney) as totalin from table_account where Type = 0 and NoteDate >= ? and NoteDate <= ?", new String[]{firstString, lastString});
         while (c.moveToNext()) {
             total = c.getString(c.getColumnIndex("totalin"));
         }

@@ -222,7 +222,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/main_gmw"
-            android:src="@drawable/more_selector"
+            android:src="@drawable/index_selector"
             android:layout_weight="1"
             android:clickable="true"/>
     </LinearLayout>

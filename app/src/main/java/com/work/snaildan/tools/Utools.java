@@ -1,6 +1,7 @@
 package com.work.snaildan.tools;
 
 import android.content.Context;
+import android.util.Log;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -68,6 +69,7 @@ public class Utools {
             c.setTime(date);
             c.set(Calendar.DAY_OF_MONTH, 1);
             String day_first = formatStr.format(c.getTime());
+            Log.i("----", "---" + day_first);
             return day_first;
         } catch (ParseException e) {
             e.printStackTrace();
@@ -85,7 +87,6 @@ public class Utools {
             c.setTime(date);
             c.add(Calendar.MONTH, 1);//加一个月
             c.set(Calendar.DATE, 1);//设置为该月第一天
-            c.add(Calendar.DATE, -1);//再减一天即为上个月最后一天
             String day_last = formatStr.format(c.getTime());
             return day_last;
         } catch (ParseException e) {
